@@ -2,7 +2,7 @@ from sqlalchemy import (Integer, String, Boolean, Column)
 from src.database import BaseDBModel, engine
 
 
-
+# класс хранящий информацию об ошейниках
 class Collars(BaseDBModel):   # string of users' table
     __tablename__ = "collars"
 
@@ -11,7 +11,7 @@ class Collars(BaseDBModel):   # string of users' table
     is_active = Column(Boolean)
 
 
-
+# класс хранящий информацию о владельцах ошейников
 class Owners(BaseDBModel):
     __tablename__ = "owners"
 

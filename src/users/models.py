@@ -1,7 +1,7 @@
 from sqlalchemy import (Integer, String, Boolean, Column)
 from src.database import BaseDBModel, engine
 
-
+# таблица, которая хранит данные о пользователях
 class Users(BaseDBModel):   # string of users' table
     __tablename__ = "users"
 
@@ -13,6 +13,7 @@ class Users(BaseDBModel):   # string of users' table
     is_superuser = Column(Boolean, default=False)
 
 
+# таблица, которая хранит данные о сессиях
 class UsersSessions(BaseDBModel):
     __tablename__ = "sessions"
     id = Column(Integer, primary_key=True)
