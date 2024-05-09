@@ -22,7 +22,7 @@ def errors(func):
 def token_checker(func):
     def wrapper(*args, **kwargs):
         accessToken = request.args.get('token')
-
+        print(accessToken)
         try:
             access = DBSession.query(UsersSessions).filter_by(token=accessToken).count()
             if access > 0:
