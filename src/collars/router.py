@@ -4,8 +4,18 @@ import uuid
 from src.database import DBSession
 import src.collars.crud as crud
 from typing import Annotated
-from src.collars.models import Collars
+#from src.collars.models import Collars
+from sqlalchemy.orm import Session
+from src.collars import models, schemas
 
+
+
+def get_db():
+    db = DBSessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
 
 def errors(func):
     def wrapper(*args, **kwargs):
@@ -28,9 +38,9 @@ def token_checker(func):
             if access > 0:
                 result = func(*args, **kwargs)
             else:
-                raise Exception("accessToken not exist")
+                raise HTTPException("accessToken not exist")
         except:
-            raise Exception("accessToken not exist")
+            raise HTTPException("accessToken not exist")
         return result
 
     wrapper.__name__ = func.__name__
@@ -41,21 +51,20 @@ def token_checker(func):
 router = APIRouter(prefix="/user/collars")
 
 # добавляем новый ошейник в систему
-@errors
-@token_checker
-@router.post("/new_collar")
-def new_collar(token, mac):
+#@errors
+#@token_checker
+@router.post("/new_collar") #response_model= schemas.NewCollar
+def new_collar(mac, db: Session = get_db()):
     #access = DBSession.query(UsersSessions).filter_by(token=token).one()
     #is_admin = DBSession.query(Users).filter_by(id=access.id).one()
     #is_admin = is_admin.is_superuser
-
 
     #if (is_admin):
     #    crud.create_collar(DBSession, mac)
     #    return {'access': 'yes'}
     #else:
     #    return {'access': 'no'}
-    crud.create_collar(DBSession(), mac=mac)
+    crud.create_collar(db, mac=mac)
     return {'access': 'yes'}
 
 

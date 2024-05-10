@@ -4,3 +4,6 @@ class collar(BaseModel):
     mac: str
     is_active: bool
 
+class NewCollar(BaseModel):
+    number: str
+    mac: str
