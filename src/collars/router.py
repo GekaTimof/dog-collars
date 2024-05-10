@@ -4,13 +4,13 @@ import uuid
 from src.database import DBSession
 import src.collars.crud as crud
 from typing import Annotated
-#from src.collars.models import Collars
+from fastapi import HTTPException
 from sqlalchemy.orm import Session
 from src.collars import models, schemas
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
-
+from src.users.crud import get_user_by_token
 
 SQLALCHEMY_DATABASE_URL = "sqlite:///./collars.db"
 
@@ -28,45 +28,16 @@ def get_db():
         db.close()
 
 
-def errors(func):
-    def wrapper(*args, **kwargs):
-       try:
-           result = func(*args, **kwargs)
-           print(result)
-       except Exception as err:
-           response = {'error': str(err)}
-           return response, 400
-       return result
-    wrapper.__name__ = func.__name__
-    return wrapper
-
-def token_checker(func):
-    def wrapper(*args, **kwargs):
-        accessToken = request.args.get('token')
-        print(accessToken)
-        try:
-            access = DBSession.query(UsersSessions).filter_by(token=accessToken).count()
-            if access > 0:
-                result = func(*args, **kwargs)
-            else:
-                raise HTTPException("accessToken not exist")
-        except:
-            raise HTTPException("accessToken not exist")
-        return result
-
-    wrapper.__name__ = func.__name__
-    return wrapper
-
-
 router = APIRouter(prefix="/user/collars")
 
 # добавляем новый ошейник в систему
-@errors
-@token_checker
 @router.post("/new_collar") #, response_model= schemas.NewCollar
 def new_collar(token, mac, db: Session = Depends(get_db)):
+    db_user = get_user_by_token(db, token)
+    if not(db_user):
+           raise HTTPException(status_code=400, detail="Wrong token")
     return crud.create_collar(db=db, mac=mac)
-    #return {'access': 'yes'}
+
 
 
 @router.post("/add_collar")

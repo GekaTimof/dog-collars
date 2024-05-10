@@ -18,6 +18,7 @@ class Owners(BaseDBModel):
     user_id = Column(Integer, primary_key=True, unique=False, index=False)
     collar_id = Column(Integer, primary_key=True, unique=False, index=False)
 
+
 BaseDBModel.metadata.create_all(bind=engine)
 
 

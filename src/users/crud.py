@@ -5,6 +5,11 @@ from src.users.models import UsersSessions as user_session
 import uuid
 
 
+def get_user_by_token(db: Session, token: str):
+    # ищем токен
+    return db.query(models.UsersSessions).filter_by(token=token).first()
+
+
 def create_user(db: Session, user: schemas.User) -> models.Users:
     fake_hash_password = user.password[::-1]
     db_user = models.Users(
@@ -29,7 +34,6 @@ def create_user_session(db: Session, id: int) -> models.UsersSessions:
             id=id,
             token=result.token
         )
-
     # если токена нет создаем его
     else:
         db_user_session = models.UsersSessions(
