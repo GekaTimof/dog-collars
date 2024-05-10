@@ -7,15 +7,26 @@ from typing import Annotated
 #from src.collars.models import Collars
 from sqlalchemy.orm import Session
 from src.collars import models, schemas
+from sqlalchemy import create_engine
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import sessionmaker
 
+
+SQLALCHEMY_DATABASE_URL = "sqlite:///./collars.db"
+
+engine = create_engine(
+    SQLALCHEMY_DATABASE_URL, connect_args={"check_same_thread": False}
+)
+SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 
 def get_db():
-    db = DBSessionLocal()
+    db = SessionLocal()
     try:
         yield db
     finally:
         db.close()
+
 
 def errors(func):
     def wrapper(*args, **kwargs):
@@ -47,25 +58,15 @@ def token_checker(func):
     return wrapper
 
 
-
 router = APIRouter(prefix="/user/collars")
 
 # добавляем новый ошейник в систему
-#@errors
-#@token_checker
-@router.post("/new_collar") #response_model= schemas.NewCollar
-def new_collar(mac, db: Session = get_db()):
-    #access = DBSession.query(UsersSessions).filter_by(token=token).one()
-    #is_admin = DBSession.query(Users).filter_by(id=access.id).one()
-    #is_admin = is_admin.is_superuser
-
-    #if (is_admin):
-    #    crud.create_collar(DBSession, mac)
-    #    return {'access': 'yes'}
-    #else:
-    #    return {'access': 'no'}
-    crud.create_collar(db, mac=mac)
-    return {'access': 'yes'}
+@errors
+@token_checker
+@router.post("/new_collar") #, response_model= schemas.NewCollar
+def new_collar(token, mac, db: Session = Depends(get_db)):
+    return crud.create_collar(db=db, mac=mac)
+    #return {'access': 'yes'}
 
 
 @router.post("/add_collar")
