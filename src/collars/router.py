@@ -11,6 +11,8 @@ from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from src.users.crud import get_user_by_token
+from src.collars.crud import get_collar_by_mac
+
 
 SQLALCHEMY_DATABASE_URL = "sqlite:///./collars.db"
 
@@ -30,14 +32,20 @@ def get_db():
 
 router = APIRouter(prefix="/user/collars")
 
-# добавляем новый ошейник в систему
-@router.post("/new_collar") #, response_model= schemas.NewCollar
-def new_collar(token, mac, db: Session = Depends(get_db)):
-    db_user = get_user_by_token(db, token)
-    if not(db_user):
-           raise HTTPException(status_code=400, detail="Wrong token")
-    return crud.create_collar(db=db, mac=mac)
 
+# добавляем новый ошейник в систему
+@router.post("/new_collar")
+def new_collar(token, mac, db: Session = Depends(get_db)):
+    # проверяем правильный ли токен
+    token_in_db = get_user_by_token(db, token)
+    if token_in_db is None:
+        raise HTTPException(status_code=400, detail="Wrong token")
+    # проверяем нет ли уже такова mac в системе
+    collar_in_db = get_collar_by_mac(db, mac)
+    if collar_in_db is not None:
+        raise HTTPException(status_code=400, detail="Collar already exist")
+
+    return crud.create_collar(db=db, mac=mac)
 
 
 @router.post("/add_collar")

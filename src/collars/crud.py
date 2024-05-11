@@ -3,6 +3,10 @@ import src.collars.models as models
 import src.collars.schemas as schemas
 
 
+def get_collar_by_mac(db: Session, mac: str):
+    return db.query(models.Collars).filter_by(mac=mac).first()
+
+
 def create_collar(db: Session, mac: str):
     db_collar = models.Collars(
         mac=mac,

@@ -1,8 +1,9 @@
 from sqlalchemy import (Integer, String, Boolean, Column)
 from src.database import BaseDBModel, engine
 
+
 # таблица, которая хранит данные о пользователях
-class Users(BaseDBModel):   # string of users' table
+class Users(BaseDBModel):
     __tablename__ = "users"
 
     id = Column(Integer, primary_key=True)
