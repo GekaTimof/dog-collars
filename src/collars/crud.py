@@ -3,13 +3,18 @@ import src.collars.models as models
 import src.collars.schemas as schemas
 
 
-# ищем mac в таблице Collars
-def get_collar_by_mac(db: Session, mac: str):
-    return db.query(models.Collars).filter_by(mac=mac).first()
+# ищем mac работающего ошейника в таблице Collars
+def get_deactivated_collar_by_mac(db: Session, mac: str):
+    return db.query(models.Collars).filter_by(mac=mac, is_active=0).first()
 
 
-# ищем id в таблице Collars
-def get_collar_by_id(db: Session, id: int):
+# ищем mac не работающего ошейника в таблице Collars
+def get_active_collar_by_mac(db: Session, mac: int):
+    return db.query(models.Collars).filter_by(mac=mac, is_active=1).first()
+
+
+# ищем id работающего ошейника в таблице Collars
+def get_active_collar_by_id(db: Session, id: int):
     return db.query(models.Collars).filter_by(id=id, is_active=1).first()
 
 
@@ -68,11 +73,24 @@ def collar_group(db: Session, user_id: int):
     return {"owner_id": user_id,
             "collars_id": is_active}
 
-def unactivate_collar(db: Session, collar_id: int):
+
+def deactivate_collar(db: Session, collar_id: int):
     db_collar_active = db.query(models.Collars).filter_by(id=collar_id).one()
-    db_collar_active.is_active = False
+    db_collar_active.is_active = 0
     db.commit()
     db.refresh(db_collar_active)
-    return {"active_status": False}
+    return {
+        "operation": "deactivate collar",
+        "access": "True"
+    }
 
 
+def activate_collar(db: Session, collar_id: int):
+    db_collar_active = db.query(models.Collars).filter_by(id=collar_id).one()
+    db_collar_active.is_active = 1
+    db.commit()
+    db.refresh(db_collar_active)
+    return {
+        "operation": "activate collar",
+        "access": "True"
+    }
