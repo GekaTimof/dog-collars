@@ -3,11 +3,30 @@ import src.collars.models as models
 import src.collars.schemas as schemas
 
 
+# ищем mac в таблице Collars
 def get_collar_by_mac(db: Session, mac: str):
     return db.query(models.Collars).filter_by(mac=mac).first()
 
 
-def create_collar(db: Session, mac: str):
+# ищем id в таблице Collars
+def get_collar_by_id(db: Session, id: int):
+    return db.query(models.Collars).filter_by(id=id, is_active=1).first()
+
+
+# получить все ошейники пользователя
+def get_user_collars(db: Session, user_id: int):
+    db_pets = [x.collar_id for x in db.query(models.Owners).filter_by(user_id=user_id).distinct()]
+    is_active = []
+    for collar_id in db_pets:
+        collar = db.query(models.Collars).filter_by(id=collar_id).first()
+        if (collar.is_active == 1):
+            is_active.append(collar_id)
+    return {"owner_id": user_id,
+            "collars_id": is_active}
+
+
+# создаем новый ошейник
+def create_collar(db: Session, mac: str) -> models.Collars:
     db_collar = models.Collars(
         mac=mac,
         is_active=True
@@ -18,10 +37,8 @@ def create_collar(db: Session, mac: str):
     return db_collar
 
 
-def add_me_collar(db: Session,
-                user_id: int,
-                collar_id: int
-                ) -> models.Owners:
+# привязываем ошейник к пользователю
+def add_me_collar(db: Session, user_id: int, collar_id: int) -> models.Owners:
     db_collar_user = models.Owners(
         user_id=user_id,
         collar_id=collar_id
@@ -31,15 +48,16 @@ def add_me_collar(db: Session,
     db.refresh(db_collar_user)
     return db_collar_user
 
-def remove_collar(db: Session,
-                user_id: int,
-                collar_id: int
-                ):
+
+# отвязываем ошейник от пользователю
+def remove_collar(db: Session, user_id: int, collar_id: int):
     db_collar_user = db.query(models.Owners).filter_by(user_id=user_id, collar_id=collar_id).one()
     db.delete(db_collar_user)
     db.commit()
-    return {}
+    return {"access": "True"}
 
+
+#
 def collar_group(db: Session, user_id: int):
     db_pets = [x.collar_id for x in db.query(models.Owners).filter_by(user_id=user_id).distinct()]
     is_active = []

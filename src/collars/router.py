@@ -13,6 +13,8 @@ from sqlalchemy.orm import sessionmaker
 from src.users.crud import get_session_by_token
 from src.users.crud import get_user_by_id
 from src.collars.crud import get_collar_by_mac
+from src.collars.crud import get_collar_by_id
+from src.collars.crud import get_user_collars
 
 
 SQLALCHEMY_DATABASE_URL = "sqlite:///./collars.db"
@@ -52,7 +54,7 @@ def token_checker(func):
 
 # добавляем новый ошейник в систему
 @router.post("/new_collar")
-def new_collar(token, mac, db: Session = Depends(get_db)):
+def new_collar(token: str, mac: str, db: Session = Depends(get_db)):
     # проверяем правильный ли токен
     session_by_token = get_session_by_token(db, token)
     if session_by_token is None:
@@ -71,25 +73,63 @@ def new_collar(token, mac, db: Session = Depends(get_db)):
     return crud.create_collar(db=db, mac=mac)
 
 
+# привязываем ошейник к пользователю
 @router.post("/add_collar")
-def add_collar(collar_id, token):
-    access = DBSession.query(UsersSessions).filter_by(token=token).one()
-    user_id = access.id
-    crud.add_me_collar(DBSession, user_id, collar_id)
-    return {"access": "True"}
+def add_collar(token: str, collar_id: int, db: Session = Depends(get_db)):
+    # проверяем правильный ли токен
+    session_by_token = get_session_by_token(db=db, token=token)
+    if session_by_token is None:
+        raise HTTPException(status_code=400, detail="Wrong token")
 
+    # получаем id пользователя
+    user_id = session_by_token.id
+
+    # проверяем, есть ли ошейник
+    collar_by_id = get_collar_by_id(db=db, id=collar_id)
+    if collar_by_id is None:
+        raise HTTPException(status_code=400, detail="Collar not exist")
+
+    # проверяем, что пользователь не связан с ошейником
+    user_collars = get_user_collars(db=db, user_id=user_id)
+    if user_collars is not None and collar_id in user_collars["collars_id"]:
+        raise HTTPException(status_code=400, detail="It is already user collar")
+
+    return crud.add_me_collar(db=db, user_id=user_id, collar_id=collar_id)
+
+
+# отвязываем ошейник от пользователю
 @router.post("/remove_collar")
-def remove_my_collar(collar_id, token):
-    access = DBSession.query(UsersSessions).filter_by(token=token).one()
-    user_id = access.id
-    crud.remove_collar(DBSession, user_id, collar_id)
-    return {"access": "True"}
+def remove_my_collar(token: str, collar_id: int, db: Session = Depends(get_db)):
+    # проверяем правильный ли токен
+    session_by_token = get_session_by_token(db=db, token=token)
+    if session_by_token is None:
+        raise HTTPException(status_code=400, detail="Wrong token")
 
+    # получаем id пользователя
+    user_id = session_by_token.id
+
+    # проверяем, привязан ли ошейник к пользователю
+    user_collars = get_user_collars(db=db, user_id=user_id)
+    if user_collars is None or collar_id not in user_collars["collars_id"]:
+        raise HTTPException(status_code=400, detail="It is not user collar")
+
+    return crud.remove_collar(db=db, user_id=user_id, collar_id=collar_id)
+
+
+# выдаём пользователю список id его ошейников
 @router.get("/my_collars")
-def my_collars(token):
-    access = DBSession.query(UsersSessions).filter_by(token=token).one()
-    user_id = access.id
-    return crud.collar_group(DBSession, user_id)
+def my_collars(token, db: Session = Depends(get_db)):
+    # проверяем правильный ли токен
+    session_by_token = get_session_by_token(db=db, token=token)
+    if session_by_token is None:
+        raise HTTPException(status_code=400, detail="Wrong token")
+
+    # получаем id пользователя
+    user_id = session_by_token.id
+
+    return get_user_collars(db=db, user_id=user_id)
+
+
 
 @router.post("/unactivate_collar")
 def delete_collar(collar_id, token):
