@@ -34,10 +34,10 @@ router = APIRouter(prefix="/user")
 
 # регистрация новово пользователя
 @router.post("/register")
-def new_user(user_new: User, db: Session = Depends(get_db)):
+def new_user(user_new: Annotated[User, Depends()], db: Session = Depends(get_db)):
+    result = get_user_by_number(db, user_new.number)
     # проверяем нет ли пользователя с таким номером в системе
-    number_in_db = get_user_by_number(db, user_new.number)
-    if number_in_db is not None:
+    if result is not None:
         raise HTTPException(status_code=400, detail="Number already exist")
 
     return crud.create_user(db=db, user=user_new)
@@ -45,16 +45,20 @@ def new_user(user_new: User, db: Session = Depends(get_db)):
 
 # авторизация существующего пользователя по номеру и паролю
 @router.post("/auth")
-def user_auth(user: Annotated[UserAuth, Depends()]):
-    result = DBSession.query(db_user).filter_by(number=user.number).one()
-    user_id = result.id
-    if user.password[::-1] == result.hash_password:
-        response = create_user_session(DBSession, user_id)
-        return {"access": "yes",
-                "token": response.token}
-    else:
-        return {"access": "no"}
+def user_auth(user: Annotated[UserAuth, Depends()], db: Session = Depends(get_db)):
+    result = get_user_by_number(db, user.number)
+    # проверяем есть ли пользователя с таким номером в системе
+    if result is None:
+        raise HTTPException(status_code=400, detail="Number not exist")
 
+    fake_hash_password = user.password[::-1]
+    # проверяем что проль подходи
+    if fake_hash_password != result.hash_password:
+        raise HTTPException(status_code=400, detail="wrong passwd")
+
+    response = create_user_session(db, result.id)
+    return {"access": "yes",
+            "token": response.token}
 
 
 

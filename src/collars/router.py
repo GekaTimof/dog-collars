@@ -10,7 +10,8 @@ from src.collars import models, schemas
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
-from src.users.crud import get_user_by_token
+from src.users.crud import get_session_by_token
+from src.users.crud import get_user_by_id
 from src.collars.crud import get_collar_by_mac
 
 
@@ -33,16 +34,38 @@ def get_db():
 router = APIRouter(prefix="/user/collars")
 
 
+def token_checker(func):
+    def wrapper(*args, **kwargs):
+        token = request.args.get('token')
+        db: Session = Depends(get_db)
+
+        # проверяем правильный ли токен
+        result = get_user_by_token(db, token)
+        if result is None:
+            raise HTTPException(status_code=400, detail="Wrong token")
+
+        return result
+
+    wrapper.__name__ = func.__name__
+    return wrapper
+
+
 # добавляем новый ошейник в систему
 @router.post("/new_collar")
 def new_collar(token, mac, db: Session = Depends(get_db)):
     # проверяем правильный ли токен
-    token_in_db = get_user_by_token(db, token)
-    if token_in_db is None:
+    session_by_token = get_session_by_token(db, token)
+    if session_by_token is None:
         raise HTTPException(status_code=400, detail="Wrong token")
+
+    # проверяем есть ли у пользователя права сурпер пользователя
+    user_by_id = get_user_by_id(db, session_by_token.id)
+    if user_by_id.is_superuser == 0:
+        raise HTTPException(status_code=400, detail="User is not superuser")
+
     # проверяем нет ли уже такова mac в системе
-    collar_in_db = get_collar_by_mac(db, mac)
-    if collar_in_db is not None:
+    collar_by_mac = get_collar_by_mac(db, mac)
+    if collar_by_mac is not None:
         raise HTTPException(status_code=400, detail="Collar already exist")
 
     return crud.create_collar(db=db, mac=mac)
