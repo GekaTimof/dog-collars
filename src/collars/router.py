@@ -47,6 +47,7 @@ def token_checker(func):
     return wrapper
 
 
+
 # добавляем новый ошейник в систему
 @router.post("/new_collar")
 @token_checker
