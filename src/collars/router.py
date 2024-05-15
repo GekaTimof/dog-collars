@@ -1,29 +1,21 @@
 from fastapi import APIRouter, Depends
 from src.users.models import UsersSessions, Users
 import uuid
-from src.database import DBSession
 import src.collars.crud as crud
 from typing import Annotated
 from fastapi import HTTPException
 from sqlalchemy.orm import Session
 from src.collars import models, schemas
-from sqlalchemy import create_engine
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker
+#from sqlalchemy.ext.declarative import declarative_base
+#from sqlalchemy.orm import sessionmaker
 from src.users.crud import get_session_by_token
 from src.users.crud import get_user_by_id
-from src.collars.crud import get_deactivated_collar_by_mac
 from src.collars.crud import get_active_collar_by_mac
+from src.collars.crud import get_deactivated_collar_by_mac
 from src.collars.crud import get_active_collar_by_id
+from src.collars.crud import get_deactivated_collar_by_id
 from src.collars.crud import get_user_collars
-
-
-SQLALCHEMY_DATABASE_URL = "sqlite:///./collars.db"
-
-engine = create_engine(
-    SQLALCHEMY_DATABASE_URL, connect_args={"check_same_thread": False}
-)
-SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+from src.database import SessionLocal
 
 
 def get_db():
@@ -155,17 +147,50 @@ def delete_collar(token: str, collar_id: int, db: Session = Depends(get_db)):
     if user_by_id.is_superuser == 0:
         raise HTTPException(status_code=400, detail="User is not superuser")
 
+    # проверяем не находиться ли ошейник в деактивированном состоянии
+    collar_by_id = get_deactivated_collar_by_id(db=db, id=collar_id)
+    if collar_by_id is not None:
+        raise HTTPException(status_code=400, detail="Collar already deactivate")
+
     # проверяем, есть ли ошейник
     collar_by_id = get_active_collar_by_id(db=db, id=collar_id)
     if collar_by_id is None:
         raise HTTPException(status_code=400, detail="Collar not exist")
 
-    # проверяем есть ли ошейник
-    collar_by_id = get_active_collar_by_id(db=db, id=collar_id)
-    if collar_by_id is not None:
-        raise HTTPException(status_code=400, detail="Collar already deactivate")
+    return crud.deactivate_collar(db, collar_id=collar_id)
+
+
+# Активируем выключенный ошейник (меняем статус на is_active=1)
+@router.post("/activate_collar")
+def delete_collar(token: str, collar_id: int, db: Session = Depends(get_db)):
+    # проверяем правильный ли токен
+    session_by_token = get_session_by_token(db, token)
+    if session_by_token is None:
+        raise HTTPException(status_code=400, detail="Wrong token")
+
+    # проверяем есть ли у пользователя права сурпер пользователя
+    user_by_id = get_user_by_id(db, session_by_token.id)
+    if user_by_id.is_superuser == 0:
+        raise HTTPException(status_code=400, detail="User is not superuser")
+
+    # проверяем не находиться ли ошейник в деактивированном состоянии
+    collar_by_id = get_deactivated_collar_by_id(db=db, id=collar_id)
+    if collar_by_id is None:
+        raise HTTPException(status_code=400, detail="Collar not deactivate collar")
 
     return crud.deactivate_collar(db, collar_id=collar_id)
 
+
+# добавляем кординаты присланные с ошейника
+@router.post("/get_coordinates")
+def delete_collar(cords: Annotated[schemas.NewCoordinates, Depends()], db: Session = Depends(get_db)):
+    # проверяем, есть ли ошейник
+    collar_by_mac = get_active_collar_by_mac(db=db, mac=cords.mac)
+    if collar_by_mac is None:
+        raise HTTPException(status_code=400, detail="Collar not exist")
+
+    collar_id = collar_by_mac.id
+
+    return crud.get_coordinates(db, cords=cords, collar_id=collar_id)
 
 

@@ -3,9 +3,9 @@ from pydantic import BaseModel
 
 
 class User(BaseModel):
+    number: str
     nickname: str
     password: str
-    number: str
     superuser: bool
 
 

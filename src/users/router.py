@@ -4,22 +4,14 @@ from src.users.models import Users as db_user
 import uuid
 import src.users.crud as crud
 from src.users.crud import create_user_session
-from src.database import DBSession
 from typing import Annotated
 from src.users.crud import get_user_by_number
 from sqlalchemy.orm import Session
-from sqlalchemy import create_engine
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker
+#from sqlalchemy.ext.declarative import declarative_base
+#from sqlalchemy.orm import sessionmaker
 from fastapi import HTTPException
-
-SQLALCHEMY_DATABASE_URL = "sqlite:///./collars.db"
-
-engine = create_engine(
-    SQLALCHEMY_DATABASE_URL, connect_args={"check_same_thread": False}
-)
-SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-
+from src.database import SessionLocal
+from src.users import models, schemas
 
 def get_db():
     db = SessionLocal()
@@ -32,24 +24,60 @@ def get_db():
 router = APIRouter(prefix="/user")
 
 
+# проверка что номер есть в системе
+def number_exist_checker(func):
+    def wrapper(*args, **kwargs):
+        number = args[0][0]
+        db: Session = Depends(get_db)
+
+        # проверяем что номер существует
+        result = get_user_by_number(db, number)
+        if result is None:
+            raise HTTPException(status_code=400, detail="Number not exist")
+
+        return func(*args, **kwargs)
+
+    wrapper.__name__ = func.__name__
+    return wrapper
+
+
+# проверка что номера нет в системе
+def number_not_exist_checker(func):
+    def wrapper(*args, **kwargs):
+        number = args[0].number
+        db: Session = Depends(get_db)
+
+        # проверяем что номера не существует
+        result = get_user_by_number(db, number)
+        if result is not None:
+            raise HTTPException(status_code=400, detail="Number already exist")
+
+        return func(*args, **kwargs)
+
+    wrapper.__name__ = func.__name__
+    return wrapper
+
+
 # регистрация новово пользователя
 @router.post("/register")
+@number_not_exist_checker
 def new_user(user_new: Annotated[User, Depends()], db: Session = Depends(get_db)):
-    result = get_user_by_number(db, user_new.number)
+    #result = get_user_by_number(db, user_new.number)
     # проверяем нет ли пользователя с таким номером в системе
-    if result is not None:
-        raise HTTPException(status_code=400, detail="Number already exist")
+    #if result is not None:
+    #    raise HTTPException(status_code=400, detail="Number already exist")
 
     return crud.create_user(db=db, user=user_new)
 
 
 # авторизация существующего пользователя по номеру и паролю
 @router.post("/auth")
+@number_exist_checker
 def user_auth(user: Annotated[UserAuth, Depends()], db: Session = Depends(get_db)):
-    result = get_user_by_number(db, user.number)
+    #result = get_user_by_number(db, user.number)
     # проверяем есть ли пользователя с таким номером в системе
-    if result is None:
-        raise HTTPException(status_code=400, detail="Number not exist")
+    #if result is None:
+    #    raise HTTPException(status_code=400, detail="Number not exist")
 
     fake_hash_password = user.password[::-1]
     # проверяем что проль подходи
@@ -61,4 +89,6 @@ def user_auth(user: Annotated[UserAuth, Depends()], db: Session = Depends(get_db
             "token": response.token}
 
 
-
+# бан пользователя (ставим статус is_active=0)
+#@router.post("/ban_user")
+#def user_auth(user: Annotated[UserAuth, Depends()], db: Session = Depends(get_db)):

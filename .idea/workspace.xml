@@ -4,11 +4,20 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="56dcf0a6-6581-4838-8ded-650a2d559310" name="Changes" comment="finish with:&#10;register&#10;auth&#10;new_collar">
+    <list default="true" id="56dcf0a6-6581-4838-8ded-650a2d559310" name="Changes" comment="finish with:&#10;register&#10;auth&#10;new_collar&#10;add_collar&#10;remove_collar&#10;my_collars&#10;deactivate_collar">
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_16_04_2024_10_06__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_16_04_2024_10_06__Changes_.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/collars.db" beforeDir="false" afterPath="$PROJECT_DIR$/collars.db" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/collars.db" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/collars/crud.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/collars/crud.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/collars/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/collars/models.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/collars/router.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/collars/router.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/collars/schemas.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/collars/schemas.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/community/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/community/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/community/router.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/community/router.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/database.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/database.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/users/router.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/users/router.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/users/schemas.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/users/schemas.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -43,6 +52,7 @@
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="RESET_MODE" value="HARD" />
     <option name="UPDATE_TYPE" value="REBASE" />
   </component>
   <component name="MarkdownSettingsMigration">
@@ -62,17 +72,17 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Python.main.executor": "Run",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "Shell Script.run2.executor": "Run",
-    "git-widget-placeholder": "main",
-    "last_opened_file_path": "C:/Users/Евгений/Desktop/Computing systems/set_server",
-    "settings.editor.selected.configurable": "preferences.pluginManager"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Python.main.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;Shell Script.run2.executor&quot;: &quot;Run&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/Евгений/dog-collars&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;reference.idesettings.debugger.python&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\User\PycharmProjects\Dogs\src\community" />
@@ -341,7 +351,14 @@
       <map>
         <entry key="MAIN">
           <value>
-            <State />
+            <State>
+              <option name="COLUMN_ID_WIDTH">
+                <map>
+                  <entry key="Table.Default.Author.ColumnIdWidth" value="190" />
+                  <entry key="Table.Space.CommitStatus.ColumnIdWidth" value="37" />
+                </map>
+              </option>
+            </State>
           </value>
         </entry>
       </map>

@@ -1,21 +1,27 @@
 from sqlalchemy.orm import Session
 import src.collars.models as models
 import src.collars.schemas as schemas
+import datetime
 
 
 # ищем mac работающего ошейника в таблице Collars
-def get_deactivated_collar_by_mac(db: Session, mac: str):
-    return db.query(models.Collars).filter_by(mac=mac, is_active=0).first()
+def get_active_collar_by_mac(db: Session, mac: int):
+    return db.query(models.Collars).filter_by(mac=mac, is_active=1).first()
 
 
 # ищем mac не работающего ошейника в таблице Collars
-def get_active_collar_by_mac(db: Session, mac: int):
-    return db.query(models.Collars).filter_by(mac=mac, is_active=1).first()
+def get_deactivated_collar_by_mac(db: Session, mac: str):
+    return db.query(models.Collars).filter_by(mac=mac, is_active=0).first()
 
 
 # ищем id работающего ошейника в таблице Collars
 def get_active_collar_by_id(db: Session, id: int):
     return db.query(models.Collars).filter_by(id=id, is_active=1).first()
+
+
+# ищем id не работающего ошейника в таблице Collars
+def get_deactivated_collar_by_id(db: Session, id: int):
+    return db.query(models.Collars).filter_by(id=id, is_active=0).first()
 
 
 # получить все ошейники пользователя
@@ -62,7 +68,7 @@ def remove_collar(db: Session, user_id: int, collar_id: int):
     return {"access": "True"}
 
 
-#
+# выдаёт список ошейников которые привязаны к пользователю
 def collar_group(db: Session, user_id: int):
     db_pets = [x.collar_id for x in db.query(models.Owners).filter_by(user_id=user_id).distinct()]
     is_active = []
@@ -74,6 +80,7 @@ def collar_group(db: Session, user_id: int):
             "collars_id": is_active}
 
 
+# выключаем ошейник (он прерстает использоваться и считается несуществующим)
 def deactivate_collar(db: Session, collar_id: int):
     db_collar_active = db.query(models.Collars).filter_by(id=collar_id).one()
     db_collar_active.is_active = 0
@@ -85,6 +92,7 @@ def deactivate_collar(db: Session, collar_id: int):
     }
 
 
+# включаем ошейник
 def activate_collar(db: Session, collar_id: int):
     db_collar_active = db.query(models.Collars).filter_by(id=collar_id).one()
     db_collar_active.is_active = 1
@@ -94,3 +102,21 @@ def activate_collar(db: Session, collar_id: int):
         "operation": "activate collar",
         "access": "True"
     }
+
+
+# добавляем кординаты, полученные от ошейника, в базу данных
+def get_coordinates(db: Session, cords: schemas.NewCoordinates, collar_id: int):
+    db_collar_cords = models.Coordinates(
+        collar_id=collar_id,
+        coordinates=cords.coordinates,
+        time=datetime.datetime.now()
+    )
+    db.add(db_collar_cords)
+    db.commit()
+    db.refresh(db_collar_cords)
+    return db_collar_cords
+
+
+
+
+

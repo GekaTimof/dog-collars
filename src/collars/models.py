@@ -19,6 +19,16 @@ class Owners(BaseDBModel):
     collar_id = Column(Integer, primary_key=True, unique=False, index=False)
 
 
+# класс хранящий координаты расположения ошейников
+class Coordinates(BaseDBModel):
+    __tablename__ = "coordinates"
+
+    Coordinates_id = Column(Integer, primary_key=True, unique=False, index=False)
+    collar_id = Column(Integer, primary_key=False, unique=False, index=False)
+    coordinates = Column(String, primary_key=False, unique=False, index=False)
+    time = Column(String, primary_key=False, unique=False, index=False)
+
+
 BaseDBModel.metadata.create_all(bind=engine)
 
 
