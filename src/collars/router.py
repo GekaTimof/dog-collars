@@ -16,6 +16,7 @@ from src.collars.crud import get_active_collar_by_id
 from src.collars.crud import get_deactivated_collar_by_id
 from src.collars.crud import get_user_collars
 from src.database import SessionLocal
+from functools import wraps
 
 
 def get_db():
@@ -30,16 +31,17 @@ router = APIRouter(prefix="/user/collars")
 
 
 def token_checker(func):
+    @wraps(func)
     def wrapper(*args, **kwargs):
-        token = request.args.get('token')
+        token = kwargs.get('token')
         db: Session = Depends(get_db)
 
         # проверяем правильный ли токен
-        result = get_user_by_token(db, token)
-        if result is None:
+        session_by_token = get_session_by_token(db=db, token=token)
+        if session_by_token is None:
             raise HTTPException(status_code=400, detail="Wrong token")
 
-        return result
+        return func(*args, **kwargs)
 
     wrapper.__name__ = func.__name__
     return wrapper
@@ -47,6 +49,7 @@ def token_checker(func):
 
 # добавляем новый ошейник в систему
 @router.post("/new_collar")
+@token_checker
 def new_collar(token: str, mac: str, db: Session = Depends(get_db)):
     # проверяем правильный ли токен
     session_by_token = get_session_by_token(db, token)

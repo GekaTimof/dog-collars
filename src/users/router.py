@@ -12,6 +12,8 @@ from sqlalchemy.orm import Session
 from fastapi import HTTPException
 from src.database import SessionLocal
 from src.users import models, schemas
+from functools import wraps
+
 
 def get_db():
     db = SessionLocal()
@@ -26,6 +28,7 @@ router = APIRouter(prefix="/user")
 
 # проверка что номер есть в системе
 def number_exist_checker(func):
+    @wraps(func)
     def wrapper(*args, **kwargs):
         number = args[0][0]
         db: Session = Depends(get_db)
@@ -41,43 +44,24 @@ def number_exist_checker(func):
     return wrapper
 
 
-# проверка что номера нет в системе
-def number_not_exist_checker(func):
-    def wrapper(*args, **kwargs):
-        number = args[0].number
-        db: Session = Depends(get_db)
-
-        # проверяем что номера не существует
-        result = get_user_by_number(db, number)
-        if result is not None:
-            raise HTTPException(status_code=400, detail="Number already exist")
-
-        return func(*args, **kwargs)
-
-    wrapper.__name__ = func.__name__
-    return wrapper
-
-
 # регистрация новово пользователя
 @router.post("/register")
-@number_not_exist_checker
 def new_user(user_new: Annotated[User, Depends()], db: Session = Depends(get_db)):
-    #result = get_user_by_number(db, user_new.number)
+    result = get_user_by_number(db, user_new.number)
     # проверяем нет ли пользователя с таким номером в системе
-    #if result is not None:
-    #    raise HTTPException(status_code=400, detail="Number already exist")
+    if result is not None:
+        raise HTTPException(status_code=400, detail="Number already exist")
 
     return crud.create_user(db=db, user=user_new)
 
 
 # авторизация существующего пользователя по номеру и паролю
 @router.post("/auth")
-@number_exist_checker
 def user_auth(user: Annotated[UserAuth, Depends()], db: Session = Depends(get_db)):
-    #result = get_user_by_number(db, user.number)
+    result = get_user_by_number(db, user.number)
     # проверяем есть ли пользователя с таким номером в системе
-    #if result is None:
-    #    raise HTTPException(status_code=400, detail="Number not exist")
+    if result is None:
+        raise HTTPException(status_code=400, detail="Number not exist")
 
     fake_hash_password = user.password[::-1]
     # проверяем что проль подходи
