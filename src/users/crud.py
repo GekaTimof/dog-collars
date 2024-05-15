@@ -10,6 +10,10 @@ def get_session_by_token(db: Session, token: str):
     return db.query(models.UsersSessions).filter_by(token=token).first()
 
 
+def get_user_id(db: Session, token: str):
+    result = get_session_by_token(db, token).id
+    return result
+
 # id токен в таблице Users
 def get_user_by_id(db: Session, id: int):
     return db.query(models.Users).filter_by(id=id).first()

@@ -15,8 +15,10 @@ from src.collars.crud import get_deactivated_collar_by_mac
 from src.collars.crud import get_active_collar_by_id
 from src.collars.crud import get_deactivated_collar_by_id
 from src.collars.crud import get_user_collars
+from src.users.crud import get_user_id
 from src.database import SessionLocal
 from functools import wraps
+from src.database import DBSession
 
 
 def get_db():
@@ -34,7 +36,7 @@ def token_checker(func):
     @wraps(func)
     def wrapper(*args, **kwargs):
         token = kwargs.get('token')
-        db: Session = Depends(get_db)
+        db: Session = DBSession()
 
         # проверяем правильный ли токен
         session_by_token = get_session_by_token(db=db, token=token)
@@ -47,21 +49,33 @@ def token_checker(func):
     return wrapper
 
 
+def superuser_checker(func):
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        token = kwargs.get('token')
+        db: Session = DBSession()
+
+        # получаем id пользователя
+        user_id = get_user_id(db=db, token=token)
+
+        # проверяем есть ли у пользователя права сурпер пользователя
+        user_by_id = get_user_by_id(db, user_id)
+        if user_by_id.is_superuser == 0:
+            raise HTTPException(status_code=400, detail="User is not superuser")
+
+        return func(*args, **kwargs)
+
+    wrapper.__name__ = func.__name__
+    return wrapper
+
+
+
 
 # добавляем новый ошейник в систему
 @router.post("/new_collar")
 @token_checker
+@superuser_checker
 def new_collar(token: str, mac: str, db: Session = Depends(get_db)):
-    # проверяем правильный ли токен
-    session_by_token = get_session_by_token(db, token)
-    if session_by_token is None:
-        raise HTTPException(status_code=400, detail="Wrong token")
-
-    # проверяем есть ли у пользователя права сурпер пользователя
-    user_by_id = get_user_by_id(db, session_by_token.id)
-    if user_by_id.is_superuser == 0:
-        raise HTTPException(status_code=400, detail="User is not superuser")
-
     # проверяем, нет ли выключенного ошейника с таким mac адресом (если есть, включаем обратно)
     deactivated_collar = get_deactivated_collar_by_mac(db=db, mac=mac)
     if deactivated_collar is not None:
@@ -78,14 +92,10 @@ def new_collar(token: str, mac: str, db: Session = Depends(get_db)):
 
 # привязываем ошейник к пользователю
 @router.post("/add_collar")
+@token_checker
 def add_collar(token: str, collar_id: int, db: Session = Depends(get_db)):
-    # проверяем правильный ли токен
-    session_by_token = get_session_by_token(db=db, token=token)
-    if session_by_token is None:
-        raise HTTPException(status_code=400, detail="Wrong token")
-
     # получаем id пользователя
-    user_id = session_by_token.id
+    user_id = get_user_id(db=db, token=token)
 
     # проверяем, есть ли ошейник
     collar_by_id = get_active_collar_by_id(db=db, id=collar_id)
@@ -101,15 +111,11 @@ def add_collar(token: str, collar_id: int, db: Session = Depends(get_db)):
 
 
 # отвязываем ошейник от пользователю
+@token_checker
 @router.post("/remove_collar")
 def remove_my_collar(token: str, collar_id: int, db: Session = Depends(get_db)):
-    # проверяем правильный ли токен
-    session_by_token = get_session_by_token(db=db, token=token)
-    if session_by_token is None:
-        raise HTTPException(status_code=400, detail="Wrong token")
-
     # получаем id пользователя
-    user_id = session_by_token.id
+    user_id = get_user_id(db=db, token=token)
 
     # проверяем, есть ли ошейник
     collar_by_id = get_active_collar_by_id(db=db, id=collar_id)
@@ -126,31 +132,19 @@ def remove_my_collar(token: str, collar_id: int, db: Session = Depends(get_db)):
 
 # выдаём пользователю список id его ошейников
 @router.get("/my_collars")
+@token_checker
 def my_collars(token, db: Session = Depends(get_db)):
-    # проверяем правильный ли токен
-    session_by_token = get_session_by_token(db=db, token=token)
-    if session_by_token is None:
-        raise HTTPException(status_code=400, detail="Wrong token")
-
     # получаем id пользователя
-    user_id = session_by_token.id
+    user_id = get_user_id(db=db, token=token)
 
     return get_user_collars(db=db, user_id=user_id)
 
 
 # удаляем ошейник (меняем статус на is_active=0)
 @router.post("/deactivate_collar")
+@token_checker
+@superuser_checker
 def delete_collar(token: str, collar_id: int, db: Session = Depends(get_db)):
-    # проверяем правильный ли токен
-    session_by_token = get_session_by_token(db, token)
-    if session_by_token is None:
-        raise HTTPException(status_code=400, detail="Wrong token")
-
-    # проверяем есть ли у пользователя права сурпер пользователя
-    user_by_id = get_user_by_id(db, session_by_token.id)
-    if user_by_id.is_superuser == 0:
-        raise HTTPException(status_code=400, detail="User is not superuser")
-
     # проверяем не находиться ли ошейник в деактивированном состоянии
     collar_by_id = get_deactivated_collar_by_id(db=db, id=collar_id)
     if collar_by_id is not None:
@@ -166,17 +160,9 @@ def delete_collar(token: str, collar_id: int, db: Session = Depends(get_db)):
 
 # Активируем выключенный ошейник (меняем статус на is_active=1)
 @router.post("/activate_collar")
+@token_checker
+@superuser_checker
 def delete_collar(token: str, collar_id: int, db: Session = Depends(get_db)):
-    # проверяем правильный ли токен
-    session_by_token = get_session_by_token(db, token)
-    if session_by_token is None:
-        raise HTTPException(status_code=400, detail="Wrong token")
-
-    # проверяем есть ли у пользователя права сурпер пользователя
-    user_by_id = get_user_by_id(db, session_by_token.id)
-    if user_by_id.is_superuser == 0:
-        raise HTTPException(status_code=400, detail="User is not superuser")
-
     # проверяем не находиться ли ошейник в деактивированном состоянии
     collar_by_id = get_deactivated_collar_by_id(db=db, id=collar_id)
     if collar_by_id is None:
