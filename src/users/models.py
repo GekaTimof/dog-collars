@@ -1,4 +1,4 @@
-from sqlalchemy import (Integer, String, Boolean, Column)
+from sqlalchemy import Integer, String, Boolean, Column
 from src.database import BaseDBModel, engine
 
 

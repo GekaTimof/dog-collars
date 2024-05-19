@@ -2,7 +2,8 @@ from sqlalchemy.orm import Session
 import src.collars.models as models
 import src.collars.schemas as schemas
 import datetime
-
+from src.users.crud import get_user_by_id
+from src.community.crud import get_collar_tasks
 
 # ищем mac работающего ошейника в таблице Collars
 def get_active_collar_by_mac(db: Session, mac: int):
@@ -115,6 +116,49 @@ def get_coordinates(db: Session, cords: schemas.NewCoordinates, collar_id: int):
     db.commit()
     db.refresh(db_collar_cords)
     return db_collar_cords
+
+
+def collars_owners(db: Session, collar_id: int):
+    db_owners = [x.user_id for x in db.query(models.Owners).filter_by(collar_id=collar_id).distinct()]
+
+    is_active = []
+    for user_id in db_owners:
+        user_by_id = get_user_by_id(db=db, user_id=user_id)
+        if user_by_id is not None:
+            is_active.append(user_id)
+
+    return {"collar_id": collar_id,
+            "owners_id": is_active}
+
+
+def get_last_collars_coordinates(db: Session, collar_id: int):
+    return db.query(models.Coordinates).filter_by(collar_id=collar_id, is_active=1).order_by(models.Coordinates.time.desc()).first()
+
+
+def get_all_lonely_collars(db: Session):
+    all_collars = [x.id for x in db.query(models.Collars).filter_by(is_active=1).distinct()]
+    all_collars_with_owner = [x.collar_id for x in db.query(models.Owners).distinct()]
+
+    lonely_collars = []
+    for collar_id in all_collars:
+        if collar_id not in all_collars_with_owner:
+            lonely_collars.append(collar_id)
+
+    return lonely_collars
+
+
+def get_user_tasks(db: Session, user_id: int):
+    user_collars = get_user_collars(db=db, user_id=user_id)['collars_id']
+
+    all_tasks = []
+    for collar_id in user_collars:
+        all_tasks += get_collar_tasks(db=db, collar_id=collar_id)['task_id']
+
+    return all_tasks
+
+
+
+
 
 
 

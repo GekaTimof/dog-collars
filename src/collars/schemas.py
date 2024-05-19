@@ -1,16 +1,19 @@
 from pydantic import BaseModel
 
-class collar(BaseModel):
-    id: int
-    mac: str
-    is_active: bool
 
+# схема для ошейников
+class Collar(BaseModel):
+    token: str
+    collar_id: int
+
+
+# схема для регистрации ошейника
 class NewCollar(BaseModel):
-    number: str
+    token: str
     mac: str
 
 
-# модель для получения коордитан
+# схема для получения коордитан
 class NewCoordinates(BaseModel):
     mac: str
     coordinates: str

@@ -6,9 +6,17 @@
   <component name="ChangeListManager">
     <list default="true" id="56dcf0a6-6581-4838-8ded-650a2d559310" name="Changes" comment="finish with:&#10;register&#10;auth&#10;new_collar&#10;add_collar&#10;remove_collar&#10;my_collars&#10;deactivate_collar">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/collars/crud.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/collars/crud.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/collars/router.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/collars/router.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/database.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/database.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/collars/schemas.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/collars/schemas.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/community/crud.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/community/crud.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/community/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/community/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/community/router.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/community/router.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/community/schemas.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/community/schemas.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/users/crud.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/users/crud.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/users/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/users/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/users/router.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/users/router.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/users/schemas.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/users/schemas.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -82,7 +90,29 @@
       <recent name="C:\Users\User\PycharmProjects\Dogs" />
     </key>
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Shell Script.run2">
+    <configuration name="router" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="Dogs" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="C:\Users\Евгений\pythonProject6\venv\Scripts\python.exe" />
+      <option name="SDK_NAME" value="Python 3.12 (pythonProject6)" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/main.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration name="run2" type="ShConfigurationType">
       <option name="SCRIPT_TEXT" value="uvicorn src.main:app --reload" />
       <option name="INDEPENDENT_SCRIPT_PATH" value="true" />
@@ -98,6 +128,15 @@
       <envs />
       <method v="2" />
     </configuration>
+    <list>
+      <item itemvalue="Python.router" />
+      <item itemvalue="Shell Script.run2" />
+    </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Python.router" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="SharedIndexes">
     <attachedChunks>
