@@ -3,7 +3,6 @@ from fastapi import APIRouter, Depends
 #from src.users.models import Users as db_user
 import uuid
 import json
-#from src.users.crud import create_user, create_user_session
 from typing import Annotated
 from src.database import SessionLocal, DBSession
 from sqlalchemy.orm import Session

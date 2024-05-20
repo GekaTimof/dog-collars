@@ -119,6 +119,3 @@ def ban(user_to_ban: Annotated[schemas.BanUser, Depends()], db: Session = Depend
 
     return crud.user_ban(db=db, user_id=user_to_ban.user_id)
 
-
-#1 - 455636b2-95fd-4ad5-a486-193f2cb68b22
-#2 - 8699a799-8a2f-49ab-82f9-b6e6e023ca8f
