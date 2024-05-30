@@ -3,6 +3,7 @@ import src.users.models as models
 import src.users.schemas as schemas
 from src.users.models import UsersSessions
 import uuid
+from argon2 import PasswordHasher
 
 
 # ищем токен в таблице UsersSessions
@@ -38,12 +39,13 @@ def get_baned_user_by_number(db: Session, number: str):
 
 # добавление новового пользователя в бд
 def create_user(db: Session, user: schemas.User) -> models.Users:
-    fake_hash_password = user.password[::-1]
+    # хэшируем пароль пользователя
+    hash_password = PasswordHasher().hash(user.password)
 
     db_user = models.Users(
         name=user.nickname,
         number=user.number,
-        hash_password=fake_hash_password,
+        hash_password=hash_password,
         is_active=1,
         is_superuser=user.superuser
     )

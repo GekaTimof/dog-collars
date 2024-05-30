@@ -12,6 +12,7 @@ from fastapi import HTTPException
 from src.database import SessionLocal, DBSession
 from src.users import models, schemas
 from functools import wraps
+from argon2 import PasswordHasher
 # для декораторов
 from src.users.crud import get_baned_user_by_id, get_session_by_token, get_user_id, get_user_by_id
 
@@ -98,8 +99,9 @@ def user_auth(user: Annotated[schemas.UserAuth, Depends()], db: Session = Depend
         raise HTTPException(status_code=400, detail="Number not exist")
 
     # проверяем что проль подходи
-    fake_hash_password = user.password[::-1]
-    if fake_hash_password != user_by_number.hash_password:
+    try:
+        PasswordHasher().verify(user_by_number.hash_password, user.password)
+    except:
         raise HTTPException(status_code=400, detail="wrong passwd")
 
     response = create_user_session(db, user_by_number.id)
