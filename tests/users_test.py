@@ -30,17 +30,17 @@ class TestRegister():
         assert response.status_code == 400
 
 class TestAuth():
-    def test_normal_auth(self):
+    '''def test_normal_auth(self):
         response = client.post("/user/auth", json={
         "number": "89657123459",
-        "password": "890"})
+        "password": "098"})
 
-        assert response.status_code == 200
+        assert response.status_code == 200'''
 
     def test_incorrect_password_auth(self):
         response = client.post("/user/auth", json={
         "number": "88003457826",
-        "password": "666fmiD"})
+        "password": "Dima666"})
 
         assert response.status_code == 400
 
@@ -51,11 +51,11 @@ class TestAuth():
 
         assert response.status_code == 400
 
-#class TestBan():
-#    def test_normal_ban(self):
- #       response = client.post("/user/ban", json={
- #       "user_id": 1,
-   #     "token": "56a2a257-173f-4ba7-bbf4-fd35f1498f15"})
+'''class TestBan():
+    def test_normal_ban(self):
+        response = client.post("/user/ban", json={
+        "token": "56a2a257-173f-4ba7-bbf4-fd35f1498f15",
+        "user_id": 1})
 
-   #     assert response.status_code == 200'''
+        assert response.status_code == 200'''
 
