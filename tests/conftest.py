@@ -71,21 +71,34 @@ def started_collars():
         mac="3333",
         is_active=False
     )
+    test_collar4 = collars_models.Collars(
+        id=4,
+        mac="4444",
+        is_active=True
+    )
 
     db_collar_user1 = collars_models.Owners(
         user_id=2,
         collar_id=1
     )
+    db_collar_user2 = collars_models.Owners(
+        user_id=2,
+        collar_id=4
+    )
     DBSession.add(db_collar_user1)
+    DBSession.add(db_collar_user2)
     DBSession.commit()
     DBSession.refresh(db_collar_user1)
+    DBSession.refresh(db_collar_user2)
     DBSession.add(test_collar1)
     DBSession.add(test_collar2)
     DBSession.add(test_collar3)
+    DBSession.add(test_collar4)
     DBSession.commit()
     DBSession.refresh(test_collar2)
     DBSession.refresh(test_collar1)
     DBSession.refresh(test_collar3)
+    DBSession.refresh(test_collar4)
 
 
 client = TestClient(app)
