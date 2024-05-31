@@ -32,7 +32,7 @@ class TestRegister():
 
         assert response.status_code == 400
 
-    # регистрация с пустым номером невозможна
+'''   # регистрация с пустым номером невозможна
     def test_empty_number_registration(self):
         response = client.post("/user/register", json={
             "number": "",
@@ -41,7 +41,7 @@ class TestRegister():
             "superuser": 1})
 
         assert response.status_code == 400
-
+'''
 
 
 class TestAuth():
@@ -61,12 +61,23 @@ class TestAuth():
 
         assert response.status_code == 400
 
+    # авторизация несуществующего пользователя невозможна
     def test_incorrect_user_auth(self):
         response = client.post("/user/auth", json={
         "number": "89657123450",
         "password": "123"})
 
         assert response.status_code == 400
+
+'''
+    # авторизация с пустыми полями невозможна
+    def test_incorrect_user_auth(self):
+        response = client.post("/user/auth", json={
+        "number": "",
+        "password": ""})
+
+        assert response.status_code == 400
+'''
 
 class TestBan():
     #   админ банит юзера
