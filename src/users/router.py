@@ -15,7 +15,8 @@ from functools import wraps
 from argon2 import PasswordHasher
 from logger import get_logger
 # для декораторов
-from src.users.crud import get_baned_user_by_id, get_session_by_token, get_user_id, get_user_by_id, get_token
+from src.users.crud import get_baned_user_by_id, get_session_by_token, get_user_id, get_user_by_id
+from src.function import get_arg_from_request
 
 
 
@@ -37,7 +38,7 @@ def token_checker(func):
     @wraps(func)
     def wrapper(*args, **kwargs):
         # получаем токен
-        token = get_token(kwargs=kwargs)
+        token = get_arg_from_request(kwargs=kwargs, arg='token')
         # создаём сессию
         db: Session = DBSession()
 
@@ -64,7 +65,7 @@ def superuser_checker(func):
     @wraps(func)
     def wrapper(*args, **kwargs):
         # получаем токен
-        token = get_token(kwargs=kwargs)
+        token = get_arg_from_request(kwargs=kwargs, arg='token')
         # создаём сессию
         db: Session = DBSession()
 
