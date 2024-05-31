@@ -1,5 +1,6 @@
 from conftest import client
 
+
 class TestRegister():
     def test_normal_user_registration(self):
         response = client.post("/user/register", json={
