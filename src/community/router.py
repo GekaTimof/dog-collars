@@ -32,7 +32,9 @@ router = APIRouter(prefix="/community")
 def token_checker(func):
     @wraps(func)
     def wrapper(*args, **kwargs):
-        token = kwargs[next(iter(kwargs))].token
+        # получаем токен
+        token = get_token(kwargs=kwargs)
+        # создаём сессию
         db: Session = DBSession()
 
         # проверяем правильный ли токен
@@ -57,7 +59,9 @@ def token_checker(func):
 def superuser_checker(func):
     @wraps(func)
     def wrapper(*args, **kwargs):
-        token = kwargs[next(iter(kwargs))].token
+        # получаем токен
+        token = get_token(kwargs=kwargs)
+        # создаём сессию
         db: Session = DBSession()
 
         # получаем id пользователя
@@ -78,7 +82,9 @@ def superuser_checker(func):
 def collar_checker_by_id(func):
     @wraps(func)
     def wrapper(*args, **kwargs):
+        # получаем id ошейника
         collar_id = kwargs[next(iter(kwargs))].collar_id
+        # создаём сессию
         db: Session = DBSession()
 
         # проверяем, есть ли ошейник
@@ -96,7 +102,9 @@ def collar_checker_by_id(func):
 def task_checker_by_id(func):
     @wraps(func)
     def wrapper(*args, **kwargs):
+        # получаем id ошейника
         collar_id = kwargs[next(iter(kwargs))].task_id
+        # создаём сессию
         db: Session = DBSession()
 
         # проверяем, что задание существует
@@ -145,10 +153,10 @@ def add_task(task: NewCollarTask, db: Session = Depends(get_db)):
 
 
 # получаем список задач для одного ошейника
-@router.get("/collar_tasks")
+@router.get("/get_collar_tasks")
 @token_checker
 @collar_checker_by_id
-def collar_tasks(collar: Collar, db: Session = Depends(get_db)):
+def collar_tasks(collar: Annotated[Collar, Depends()], db: Session = Depends(get_db)):
     return crud.get_collar_tasks(db=db, collar_id=collar.collar_id)
 
 

@@ -35,7 +35,9 @@ router = APIRouter(prefix="/collars")
 def token_checker(func):
     @wraps(func)
     def wrapper(*args, **kwargs):
-        token = kwargs[next(iter(kwargs))].token
+        # получаем токен
+        token = get_token(kwargs=kwargs)
+        # создаём сессию
         db: Session = DBSession()
 
         # проверяем правильный ли токен
@@ -60,7 +62,9 @@ def token_checker(func):
 def superuser_checker(func):
     @wraps(func)
     def wrapper(*args, **kwargs):
-        token = kwargs[next(iter(kwargs))].token
+        # получаем токен
+        token = get_token(kwargs=kwargs)
+        # создаём сессию
         db: Session = DBSession()
 
         # получаем id пользователя
@@ -81,7 +85,9 @@ def superuser_checker(func):
 def Collar_checker_by_id(func):
     @wraps(func)
     def wrapper(*args, **kwargs):
+        # получаем id ошейника
         collar_id = kwargs[next(iter(kwargs))].collar_id
+        # создаём сессию
         db: Session = DBSession()
 
         # проверяем, есть ли ошейник

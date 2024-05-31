@@ -13,9 +13,10 @@ from src.database import SessionLocal, DBSession
 from src.users import models, schemas
 from functools import wraps
 from argon2 import PasswordHasher
-# для декораторов
-from src.users.crud import get_baned_user_by_id, get_session_by_token, get_user_id, get_user_by_id
 from logger import get_logger
+# для декораторов
+from src.users.crud import get_baned_user_by_id, get_session_by_token, get_user_id, get_user_by_id, get_token
+
 
 
 userlogger = get_logger("user_loger")
@@ -35,7 +36,9 @@ router = APIRouter(prefix="/user")
 def token_checker(func):
     @wraps(func)
     def wrapper(*args, **kwargs):
-        token = kwargs[next(iter(kwargs))].token
+        # получаем токен
+        token = get_token(kwargs=kwargs)
+        # создаём сессию
         db: Session = DBSession()
 
         # проверяем правильный ли токен
@@ -60,7 +63,9 @@ def token_checker(func):
 def superuser_checker(func):
     @wraps(func)
     def wrapper(*args, **kwargs):
-        token = kwargs[next(iter(kwargs))].token
+        # получаем токен
+        token = get_token(kwargs=kwargs)
+        # создаём сессию
         db: Session = DBSession()
 
         # получаем id пользователя

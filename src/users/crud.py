@@ -6,6 +6,18 @@ import uuid
 from argon2 import PasswordHasher
 
 
+# получить токен из запроса
+def get_token(kwargs):
+    token = 0
+    for key in [*kwargs]:
+        if hasattr(kwargs[key], "token"):
+            token = kwargs[key].token
+
+    if not (token):
+        raise HTTPException(status_code=400, detail=f"Can't get token")
+
+    return token
+
 # ищем токен в таблице UsersSessions
 def get_session_by_token(db: Session, token: str):
     return db.query(models.UsersSessions).filter_by(token=token).first()

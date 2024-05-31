@@ -7,27 +7,28 @@ class TestRegister():
             "number": "998",
             "nickname": "test",
             "password": "123",
-            "superuser": True})
+            "superuser": 1})
 
         assert response.status_code == 200
 
     def test_repeated_user_registration(self):
         response = client.post("/user/register", json={
-        "number": "89657123459",
-        "nickname": "Katya",
-        "password": "123",
-        "superuser": 1})
+            "number": "89657123459",
+            "nickname": "Katya",
+            "password": "123",
+            "superuser": 1})
 
         assert response.status_code == 400
 
     def test_empty_password_registration(self):
         response = client.post("/user/register", json={
-        "number": "89657123459",
-        "nickname": "Katya",
-        "password": "",
-        "superuser": True})
+            "number": "89657123459",
+            "nickname": "Katya",
+            "password": "",
+            "superuser": 1})
 
         assert response.status_code == 400
+
 
 class TestAuth():
     '''def test_normal_auth(self):

@@ -8,9 +8,9 @@ setup(
    version='1.0',
    description='Trying to make setup for good marks)',
    license='MIT',
-   author='Lena Filipenko',
-   author_email='lenaphilip@mail.ru',
-   url='https://github.com/mercury-s-cabbage/dog-collars',
+   author='Timofeev Evgeniy, Lena Filipenko',
+   author_email='geka.timof@mail.ru, lenaphilip@mail.ru',
+   url='https://github.com/GekaTimof/dog-collars.git',
    packages=['src'],
    install_requires=requirements,
    extras_require={
