@@ -4,10 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="56dcf0a6-6581-4838-8ded-650a2d559310" name="Changes" comment="finish with app requests">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/collars/router.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/collars/router.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/community/router.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/community/router.py" afterDir="false" />
+    <list default="true" id="56dcf0a6-6581-4838-8ded-650a2d559310" name="Changes" comment="finished with user tests">
+      <change beforePath="$PROJECT_DIR$/log_file.log" beforeDir="false" afterPath="$PROJECT_DIR$/log_file.log" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -410,7 +408,15 @@
       <option name="project" value="LOCAL" />
       <updated>1717159772808</updated>
     </task>
-    <option name="localTasksCounter" value="34" />
+    <task id="LOCAL-00034" summary="finished with user tests">
+      <option name="closed" value="true" />
+      <created>1717161016012</created>
+      <option name="number" value="00034" />
+      <option name="presentableId" value="LOCAL-00034" />
+      <option name="project" value="LOCAL" />
+      <updated>1717161016012</updated>
+    </task>
+    <option name="localTasksCounter" value="35" />
     <servers />
   </component>
   <component name="Vcs.Log.History.Properties">
@@ -451,6 +457,7 @@
     <MESSAGE value="finish with:&#10;register&#10;auth&#10;new_collar" />
     <MESSAGE value="finish with:&#10;register&#10;auth&#10;new_collar&#10;add_collar&#10;remove_collar&#10;my_collars&#10;deactivate_collar" />
     <MESSAGE value="finish with app requests" />
-    <option name="LAST_COMMIT_MESSAGE" value="finish with app requests" />
+    <MESSAGE value="finished with user tests" />
+    <option name="LAST_COMMIT_MESSAGE" value="finished with user tests" />
   </component>
 </project>
