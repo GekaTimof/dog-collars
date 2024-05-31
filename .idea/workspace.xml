@@ -6,10 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="56dcf0a6-6581-4838-8ded-650a2d559310" name="Changes" comment="fix api and create get_token()">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/collars/router.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/collars/router.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/community/crud.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/community/crud.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/community/router.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/community/router.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/users/router.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/users/router.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/log_file.log" beforeDir="false" afterPath="$PROJECT_DIR$/log_file.log" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
