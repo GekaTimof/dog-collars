@@ -153,7 +153,7 @@ def remove_my_collar(collar: schemas.Collar, db: Session = Depends(get_db)):
     return crud.remove_collar(db=db, user_id=user_id, collar_id=collar.collar_id)
 
 
-# выдаём пользователю список id его ошейников
+# выдаём пользователю список id его ошейнико
 @router.get("/get_my_collars")
 @token_checker
 def my_collars(user: Annotated[User, Depends()], db: Session = Depends(get_db)):
