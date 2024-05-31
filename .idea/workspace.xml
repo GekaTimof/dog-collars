@@ -5,13 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="56dcf0a6-6581-4838-8ded-650a2d559310" name="Changes" comment="finish with app requests">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/setup.py" beforeDir="false" afterPath="$PROJECT_DIR$/setup.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/collars/router.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/collars/router.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/community/router.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/community/router.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/users/crud.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/users/crud.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/users/router.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/users/router.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/users_test.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/users_test.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -88,6 +82,7 @@
   <component name="RunManager" selected="Shell Script.run2">
     <configuration name="router" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="Dogs" />
+      <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <envs>
