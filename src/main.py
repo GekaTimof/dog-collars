@@ -8,5 +8,5 @@ app.include_router(users_router)
 app.include_router(collars_router)
 app.include_router(community_router)
 
-#test
+
 
