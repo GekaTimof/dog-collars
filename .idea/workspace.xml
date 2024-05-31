@@ -4,9 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="56dcf0a6-6581-4838-8ded-650a2d559310" name="Changes" comment="fix api and create get_token()">
+    <list default="true" id="56dcf0a6-6581-4838-8ded-650a2d559310" name="Changes" comment="post community tests">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/log_file.log" beforeDir="false" afterPath="$PROJECT_DIR$/log_file.log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/readme.md" beforeDir="false" afterPath="$PROJECT_DIR$/readme.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/community/router.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/community/router.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/users/crud.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/users/crud.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/users/router.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/users/router.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -47,7 +50,7 @@
     <option name="stateVersion" value="1" />
   </component>
   <component name="ProblemsViewState">
-    <option name="selectedTabId" value="CurrentFile" />
+    <option name="selectedTabId" value="ProjectErrors" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 2
@@ -83,6 +86,7 @@
   <component name="RunManager" selected="Shell Script.run2">
     <configuration name="router" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="Dogs" />
+      <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <envs>
@@ -400,15 +404,71 @@
       <option name="project" value="LOCAL" />
       <updated>1717085640453</updated>
     </task>
-    <task id="LOCAL-00033" summary="fix api and create get_token()">
+    <task id="LOCAL-00033" summary="try to connect versions">
       <option name="closed" value="true" />
-      <created>1717146976804</created>
+      <created>1717161389810</created>
       <option name="number" value="00033" />
       <option name="presentableId" value="LOCAL-00033" />
       <option name="project" value="LOCAL" />
-      <updated>1717146976804</updated>
+      <updated>1717161389810</updated>
     </task>
-    <option name="localTasksCounter" value="34" />
+    <task id="LOCAL-00034" summary="try to connect versions">
+      <option name="closed" value="true" />
+      <created>1717161438401</created>
+      <option name="number" value="00034" />
+      <option name="presentableId" value="LOCAL-00034" />
+      <option name="project" value="LOCAL" />
+      <updated>1717161438401</updated>
+    </task>
+    <task id="LOCAL-00035" summary="some collars functions">
+      <option name="closed" value="true" />
+      <created>1717167177115</created>
+      <option name="number" value="00035" />
+      <option name="presentableId" value="LOCAL-00035" />
+      <option name="project" value="LOCAL" />
+      <updated>1717167177115</updated>
+    </task>
+    <task id="LOCAL-00036" summary="post collars tests">
+      <option name="closed" value="true" />
+      <created>1717168994269</created>
+      <option name="number" value="00036" />
+      <option name="presentableId" value="LOCAL-00036" />
+      <option name="project" value="LOCAL" />
+      <updated>1717168994269</updated>
+    </task>
+    <task id="LOCAL-00037" summary="post collars tests">
+      <option name="closed" value="true" />
+      <created>1717170572509</created>
+      <option name="number" value="00037" />
+      <option name="presentableId" value="LOCAL-00037" />
+      <option name="project" value="LOCAL" />
+      <updated>1717170572509</updated>
+    </task>
+    <task id="LOCAL-00038" summary="post collars tests">
+      <option name="closed" value="true" />
+      <created>1717172427948</created>
+      <option name="number" value="00038" />
+      <option name="presentableId" value="LOCAL-00038" />
+      <option name="project" value="LOCAL" />
+      <updated>1717172427948</updated>
+    </task>
+    <task id="LOCAL-00039" summary="post community tests">
+      <option name="closed" value="true" />
+      <created>1717172443612</created>
+      <option name="number" value="00039" />
+      <option name="presentableId" value="LOCAL-00039" />
+      <option name="project" value="LOCAL" />
+      <updated>1717172443612</updated>
+    </task>
+    <task id="LOCAL-00040" summary="post community tests">
+      <option name="closed" value="true" />
+      <created>1717173551489</created>
+      <option name="number" value="00040" />
+      <option name="presentableId" value="LOCAL-00040" />
+      <option name="project" value="LOCAL" />
+      <updated>1717173551489</updated>
+    </task>
+    <option name="localTasksCounter" value="41" />
     <servers />
   </component>
   <component name="Vcs.Log.History.Properties">
@@ -449,7 +509,10 @@
     <MESSAGE value="finish with:&#10;register&#10;auth&#10;new_collar" />
     <MESSAGE value="finish with:&#10;register&#10;auth&#10;new_collar&#10;add_collar&#10;remove_collar&#10;my_collars&#10;deactivate_collar" />
     <MESSAGE value="finish with app requests" />
-    <MESSAGE value="fix api and create get_token()" />
-    <option name="LAST_COMMIT_MESSAGE" value="fix api and create get_token()" />
+    <MESSAGE value="try to connect versions" />
+    <MESSAGE value="some collars functions" />
+    <MESSAGE value="post collars tests" />
+    <MESSAGE value="post community tests" />
+    <option name="LAST_COMMIT_MESSAGE" value="post community tests" />
   </component>
 </project>

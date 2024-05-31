@@ -13,6 +13,7 @@ import src.community.crud as crud
 from src.community.schemas import NewCollarTask, Complaint, Respond, CompleteTask
 from src.collars.crud import get_active_collar_by_id
 from src.collars.schemas import Collar
+from logger import get_logger
 # для декораторов
 from src.users.crud import get_baned_user_by_id, get_session_by_token, get_user_id, get_user_by_id
 from src.function import get_arg_from_request
@@ -27,6 +28,7 @@ def get_db():
 
 
 router = APIRouter(prefix="/community")
+communitylogger = get_logger("community_loger")
 
 
 # проверка существования токена
@@ -41,6 +43,7 @@ def token_checker(func):
         # проверяем правильный ли токен
         session_by_token = get_session_by_token(db=db, token=token)
         if session_by_token is None:
+            communitylogger.warning("Wrong token")
             raise HTTPException(status_code=400, detail="Wrong token")
 
         # получаем id пользователя
@@ -48,8 +51,9 @@ def token_checker(func):
         # проверяем, не забанен ли пользователь токена
         baned_user_by_id = get_baned_user_by_id(db=db, user_id=user_id)
         if baned_user_by_id is not None:
+            communitylogger.error("Number is baned")
             raise HTTPException(status_code=400, detail="Number is baned")
-
+        communitylogger.info("Token is right")
         return func(*args, **kwargs)
 
     wrapper.__name__ = func.__name__
