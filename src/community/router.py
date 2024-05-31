@@ -104,12 +104,12 @@ def task_checker_by_id(func):
     @wraps(func)
     def wrapper(*args, **kwargs):
         # получаем id ошейника
-        collar_id = get_arg_from_request(kwargs=kwargs, arg='collar_id')
+        task_id = get_arg_from_request(kwargs=kwargs, arg='task_id')
         # создаём сессию
         db: Session = DBSession()
 
         # проверяем, что задание существует
-        active_task_by_id = crud.get_active_task_by_id(db=db, task_id=task.task_id)
+        active_task_by_id = crud.get_active_task_by_id(db=db, task_id=task_id)
         if active_task_by_id is None:
             raise HTTPException(status_code=400, detail="Task not exist")
 
@@ -159,6 +159,14 @@ def add_task(task: NewCollarTask, db: Session = Depends(get_db)):
 @collar_checker_by_id
 def collar_tasks(collar: Annotated[Collar, Depends()], db: Session = Depends(get_db)):
     return crud.get_collar_tasks(db=db, collar_id=collar.collar_id)
+
+
+# получаем список срочных задач для одного ошейника
+@router.get("/get_alert_collar_tasks")
+@token_checker
+@collar_checker_by_id
+def collar_tasks(collar: Annotated[Collar, Depends()], db: Session = Depends(get_db)):
+    return crud.get_alert_collar_tasks(db=db, collar_id=collar.collar_id)
 
 
 # пометка задания, как выполненого

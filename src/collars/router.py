@@ -107,6 +107,10 @@ def Collar_checker_by_id(func):
 @token_checker
 @superuser_checker
 def new_collar(new_collar: schemas.NewCollar, db: Session = Depends(get_db)):
+    # проверяем что номер введён правильно
+    if not(new_collar.mac.isdigit()):
+        raise HTTPException(status_code=400, detail="Incorrect mac")
+
     # проверяем, нет ли выключенного ошейника с таким mac адресом (если есть, включаем обратно)
     deactivated_collar = get_deactivated_collar_by_mac(db=db, mac=new_collar.mac)
     if deactivated_collar is not None:
@@ -197,6 +201,10 @@ def delete_collar(collar: schemas.Collar, db: Session = Depends(get_db)):
 # добавляем кординаты присланные с ошейника
 @router.post("/post_coordinates")
 def delete_collar(cords: schemas.NewCoordinates, db: Session = Depends(get_db)):
+    # проверяем что номер введён правильно
+    if not(cords.coordinates):
+        raise HTTPException(status_code=400, detail="Incorrect coordinates")
+
     # проверяем, есть ли ошейник
     collar_by_mac = get_active_collar_by_mac(db=db, mac=cords.mac)
     if collar_by_mac is None:

@@ -83,14 +83,15 @@ def superuser_checker(func):
     return wrapper
 
 
-#!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!     Начало запросов     !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-
 # регистрация нового пользователя
 @router.post("/register")
 def new_user(user_new: schemas.NewUser, db: Session = Depends(get_db)):
-    result = crud.get_user_by_number(db, user_new.number)
+    # проверяем что номер введён правильно
+    if not(user_new.number.isdigit()):
+        raise HTTPException(status_code=400, detail="Incorrect number")
+
     # проверяем нет ли пользователя с таким номером в системе
+    result = crud.get_user_by_number(db, user_new.number)
     if result is not None:
         userlogger.warning("User " + str(PasswordHasher().hash(user_new.number)) + " is already exist")
         raise HTTPException(status_code=400, detail="Number already exist")

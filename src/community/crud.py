@@ -57,6 +57,13 @@ def get_collar_tasks(db: Session, collar_id: int):
             "task_id": all_tasks}
 
 
+# получаем список срочных задач для одного ошейника
+def get_alert_collar_tasks(db: Session, collar_id: int):
+    all_tasks = [x.task_id for x in db.query(models.Task).filter_by(is_completed=1, collar_id=collar_id).distinct()]
+    return {"collar_id": collar_id,
+            "task_id": all_tasks}
+
+
 # пометка задания, как выполненого
 def complete_collar_task(db: Session, task_id: int):
     db_complete_task = db.query(models.Task).filter_by(task_id=task_id).one()
