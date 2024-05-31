@@ -243,11 +243,3 @@ def owners(collar: Annotated[schemas.Collar, Depends()], db: Session = Depends(g
 @token_checker
 def get_lonely_collars(user: Annotated[User, Depends()], db: Session = Depends(get_db)):
     return crud.get_all_lonely_collars(db=db)
-
-
-# выдаём список ваших заданий
-@router.get("/get_my_tasks")
-@token_checker
-def get_my_tasks(user: Annotated[User, Depends()], db: Session = Depends(get_db)):
-    user_id = get_user_id(db=db, token=user.token)
-    return crud.get_user_tasks(db=db, user_id=user_id)

@@ -22,8 +22,8 @@ class NewCollarTask(BaseModel):
     is_alert: bool
 
 
-# схема для выполнения задания
-class CompleteTask(BaseModel):
+# схема для задания
+class Task(BaseModel):
     token: str
     task_id: int
 

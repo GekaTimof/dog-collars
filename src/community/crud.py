@@ -9,6 +9,7 @@ def get_complaint_by_id(db: Session, complaint_id: int):
     return db.query(models.Complaint).filter_by(complaint_id=complaint_id, is_answered=0).first()
 
 
+# выдаем информацию об ошейнику по id
 def get_active_task_by_id(db: Session, task_id: int):
     return db.query(models.Task).filter_by(task_id=task_id, is_completed=0).first()
 
@@ -23,6 +24,12 @@ def add_user_complaint(db: Session, complaint: schemas.Complaint) -> models.Comp
     db.commit()
     db.refresh(db_complain)
     return db_complain
+
+
+# выдаем список жалоб пользователей
+def get_user_complaints(db: Session):
+    all_complaints = [x for x in db.query(models.Complaint).filter_by(is_answered=0).distinct()]
+    return {"complaints": all_complaints}
 
 
 # помечаем, что мы ответили на жалобу
