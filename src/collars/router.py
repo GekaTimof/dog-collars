@@ -20,7 +20,6 @@ from functools import wraps
 from src.users.crud import get_baned_user_by_id, get_session_by_token, get_user_id, get_user_by_id
 
 
-
 def get_db():
     db = SessionLocal()
     try:
@@ -29,7 +28,7 @@ def get_db():
         db.close()
 
 
-router = APIRouter(prefix="/user/collars")
+router = APIRouter(prefix="/collars")
 
 
 # проверка существования токена
@@ -100,7 +99,7 @@ def Collar_checker_by_id(func):
 @router.post("/new_collar")
 @token_checker
 @superuser_checker
-def new_collar(new_collar: Annotated[schemas.NewCollar, Depends()], db: Session = Depends(get_db)):
+def new_collar(new_collar: schemas.NewCollar, db: Session = Depends(get_db)):
     # проверяем, нет ли выключенного ошейника с таким mac адресом (если есть, включаем обратно)
     deactivated_collar = get_deactivated_collar_by_mac(db=db, mac=new_collar.mac)
     if deactivated_collar is not None:
@@ -116,10 +115,10 @@ def new_collar(new_collar: Annotated[schemas.NewCollar, Depends()], db: Session 
 
 
 # привязываем ошейник к пользователю
-@router.post("/add_collar")
+@router.post("/add_collars")
 @token_checker
 @Collar_checker_by_id
-def add_collar(collar: Annotated[schemas.Collar, Depends()], db: Session = Depends(get_db)):
+def add_collar(collar: schemas.Collar, db: Session = Depends(get_db)):
     # получаем id пользователя
     user_id = get_user_id(db=db, token=collar.token)
 
@@ -135,7 +134,7 @@ def add_collar(collar: Annotated[schemas.Collar, Depends()], db: Session = Depen
 @router.post("/remove_collar")
 @token_checker
 @Collar_checker_by_id
-def remove_my_collar(collar: Annotated[schemas.Collar, Depends()], db: Session = Depends(get_db)):
+def remove_my_collar(collar: schemas.Collar, db: Session = Depends(get_db)):
     # получаем id пользователя
     user_id = get_user_id(db=db, token=collar.token)
 
@@ -161,7 +160,7 @@ def my_collars(user: Annotated[User, Depends()], db: Session = Depends(get_db)):
 @router.post("/deactivate_collar")
 @token_checker
 @superuser_checker
-def delete_collar(collar: Annotated[schemas.Collar, Depends()], db: Session = Depends(get_db)):
+def delete_collar(collar: schemas.Collar, db: Session = Depends(get_db)):
     # проверяем не находиться ли ошейник в деактивированном состоянии
     collar_by_id = get_deactivated_collar_by_id(db=db, id=collar.collar_id)
     if collar_by_id is not None:
@@ -179,7 +178,7 @@ def delete_collar(collar: Annotated[schemas.Collar, Depends()], db: Session = De
 @router.post("/activate_collar")
 @token_checker
 @superuser_checker
-def delete_collar(collar: Annotated[schemas.Collar, Depends()], db: Session = Depends(get_db)):
+def delete_collar(collar: schemas.Collar, db: Session = Depends(get_db)):
     # проверяем не находиться ли ошейник в деактивированном состоянии
     collar_by_id = get_deactivated_collar_by_id(db=db, id=collar.collar_id)
     if collar_by_id is None:
@@ -190,7 +189,7 @@ def delete_collar(collar: Annotated[schemas.Collar, Depends()], db: Session = De
 
 # добавляем кординаты присланные с ошейника
 @router.post("/post_coordinates")
-def delete_collar(cords: Annotated[schemas.NewCoordinates, Depends()], db: Session = Depends(get_db)):
+def delete_collar(cords: schemas.NewCoordinates, db: Session = Depends(get_db)):
     # проверяем, есть ли ошейник
     collar_by_mac = get_active_collar_by_mac(db=db, mac=cords.mac)
     if collar_by_mac is None:

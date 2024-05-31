@@ -25,7 +25,7 @@ def get_db():
         db.close()
 
 
-router = APIRouter(prefix="/user/community")
+router = APIRouter(prefix="/community")
 
 
 # проверка существования токена
@@ -113,7 +113,7 @@ def task_checker_by_id(func):
 # отправление запроса на бан пользователя
 @router.post("/add_complaint")
 @token_checker
-def add_complaint(complaint: Annotated[Complaint, Depends()], db: Session = Depends(get_db)):
+def add_complaint(complaint: Complaint, db: Session = Depends(get_db)):
     # проверяем существует ли тот, на кого направлена жалоба
     user_by_id = get_user_by_id(db=db, user_id=complaint.user_id)
     if user_by_id is None:
@@ -126,7 +126,7 @@ def add_complaint(complaint: Annotated[Complaint, Depends()], db: Session = Depe
 @router.post("/respond_complaint")
 @token_checker
 @superuser_checker
-def respond_complaint(respond: Annotated[Respond, Depends()], db: Session = Depends(get_db)):
+def respond_complaint(respond: Respond, db: Session = Depends(get_db)):
     # проверяем существует нужная жалоба
     complaint_id = crud.get_complaint_by_id(db=db, complaint_id=respond.complaint_id)
     if complaint_id is None:
@@ -140,7 +140,7 @@ def respond_complaint(respond: Annotated[Respond, Depends()], db: Session = Depe
 @token_checker
 @superuser_checker
 @collar_checker_by_id
-def add_task(task: Annotated[NewCollarTask, Depends()], db: Session = Depends(get_db)):
+def add_task(task: NewCollarTask, db: Session = Depends(get_db)):
     return crud.add_collar_task(db=db, task=task)
 
 
@@ -148,7 +148,7 @@ def add_task(task: Annotated[NewCollarTask, Depends()], db: Session = Depends(ge
 @router.get("/collar_tasks")
 @token_checker
 @collar_checker_by_id
-def collar_tasks(collar: Annotated[Collar, Depends()], db: Session = Depends(get_db)):
+def collar_tasks(collar: Collar, db: Session = Depends(get_db)):
     return crud.get_collar_tasks(db=db, collar_id=collar.collar_id)
 
 
@@ -156,7 +156,7 @@ def collar_tasks(collar: Annotated[Collar, Depends()], db: Session = Depends(get
 @router.post("/complete_task")
 @token_checker
 @task_checker_by_id
-def complete_task(task: Annotated[CompleteTask, Depends()], db: Session = Depends(get_db)):
+def complete_task(task: CompleteTask, db: Session = Depends(get_db)):
     return crud.complete_collar_task(db=db, task_id=task.task_id)
 
 
