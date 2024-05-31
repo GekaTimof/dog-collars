@@ -38,7 +38,7 @@ def get_baned_user_by_number(db: Session, number: str):
 
 
 # добавление новового пользователя в бд
-def create_user(db: Session, user: schemas.User) -> models.Users:
+def create_user(db: Session, user: schemas.NewUser) -> models.Users:
     # хэшируем пароль пользователя
     hash_password = PasswordHasher().hash(user.password)
 

@@ -15,7 +15,7 @@ from functools import wraps
 from argon2 import PasswordHasher
 # для декораторов
 from src.users.crud import get_baned_user_by_id, get_session_by_token, get_user_id, get_user_by_id
-from logger import get_logger, ColoredFormatter
+from logger import get_logger
 
 
 userlogger = get_logger("user_loger")
