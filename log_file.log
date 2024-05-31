@@ -1,0 +1,5 @@
+DEBUG (31/05/2024 01:01:42): Дебаг (Line: 9) [logger.py]
+INFO (31/05/2024 01:01:42): инфо (Line: 10) [logger.py]
+WARNING (31/05/2024 01:01:42): Варнинг (Line: 11) [logger.py]
+ERROR (31/05/2024 01:01:42): Эррор (Line: 12) [logger.py]
+CRITICAL (31/05/2024 01:01:42): Критикал (Line: 13) [logger.py]
