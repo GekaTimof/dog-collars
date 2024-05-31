@@ -126,6 +126,7 @@ def new_collar(new_collar: schemas.NewCollar, db: Session = Depends(get_db)):
 
 
 # привязываем ошейник к пользователю
+# привязываем ошейник к пользователю
 @router.post("/add_collars")
 @token_checker
 @Collar_checker_by_id
