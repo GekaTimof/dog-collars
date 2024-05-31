@@ -18,6 +18,7 @@ from src.database import SessionLocal, DBSession
 from functools import wraps
 # для декораторов
 from src.users.crud import get_baned_user_by_id, get_session_by_token, get_user_id, get_user_by_id
+from src.function import get_arg_from_request
 
 
 def get_db():
@@ -36,7 +37,7 @@ def token_checker(func):
     @wraps(func)
     def wrapper(*args, **kwargs):
         # получаем токен
-        token = get_token(kwargs=kwargs)
+        token = get_arg_from_request(kwargs=kwargs, arg='token')
         # создаём сессию
         db: Session = DBSession()
 
@@ -63,7 +64,7 @@ def superuser_checker(func):
     @wraps(func)
     def wrapper(*args, **kwargs):
         # получаем токен
-        token = get_token(kwargs=kwargs)
+        token = get_arg_from_request(kwargs=kwargs, arg='token')
         # создаём сессию
         db: Session = DBSession()
 
@@ -86,7 +87,7 @@ def Collar_checker_by_id(func):
     @wraps(func)
     def wrapper(*args, **kwargs):
         # получаем id ошейника
-        collar_id = kwargs[next(iter(kwargs))].collar_id
+        collar_id = get_arg_from_request(kwargs=kwargs, arg='collar_id')
         # создаём сессию
         db: Session = DBSession()
 

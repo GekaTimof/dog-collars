@@ -16,3 +16,4 @@
  [94m INFO (2024-05-31 16:24:27,248): User $argon2id$v=19$m=65536,t=3,p=4$nDlBseM8WswmMQHertYtpw$M4NtMGx931CQwiza0zCKgufFObCtsKewPq97mmrQM8w succesfully registred (Line: 92) user_loger [router.py]
  [94m WARNING (2024-05-31 16:24:27,417): User $argon2id$v=19$m=65536,t=3,p=4$GJYgvnICnnQGAaqIhdeNnA$PSO9iqp3yEVuc3dUBeLtkhrKAVYlg2be86CMB9vG/Xk is already exist (Line: 89) user_loger [router.py]
  [94m WARNING (2024-05-31 16:24:27,498): User $argon2id$v=19$m=65536,t=3,p=4$w1GU7Hwsxy3u51TNcd21Kg$PjRzx9K+CnJSIgJ72BMaE3hFR/WbPYVmg565YzM8qzc is already exist (Line: 89) user_loger [router.py]
+ [94m INFO (2024-05-31 17:21:51,188): User $argon2id$v=19$m=65536,t=3,p=4$0FsFCMQ+X3z/X8qgula8dw$sRLmGOUjmG2M6KdhS1Ch8hJTopiGrDNKHHgIWgiGcFI succesfully registred (Line: 97) user_loger [router.py]
