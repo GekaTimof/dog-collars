@@ -1,11 +1,10 @@
 import logging
-from logging.handlers import TimedRotatingFileHandler
 import sys
+from logging.handlers import TimedRotatingFileHandler
 
-FORMATTER_STRING = "%(levelname)s (%(asctime)s): %(message)s (Line: %(lineno)d) %(name)s [%(filename)s]"
+FORMATTER_STRING = " \033[94m %(levelname)s (%(asctime)s): %(message)s (Line: %(lineno)d) %(name)s [%(filename)s]"
 FORMATTER = logging.Formatter(FORMATTER_STRING)
 LOG_FILE = "log_file.log"
-
 def get_logger(logger_name):
     logger = logging.getLogger(logger_name)
     logger.setLevel(logging.INFO)

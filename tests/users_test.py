@@ -1,9 +1,11 @@
 from conftest import client
+
+
 class TestRegister():
     def test_normal_user_registration(self):
         response = client.post("/user/register", json={
-            "number": "89247014312",
-            "nickname": "Lena",
+            "number": "998",
+            "nickname": "test",
             "password": "123",
             "superuser": True})
 

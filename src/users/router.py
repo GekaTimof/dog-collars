@@ -15,10 +15,11 @@ from functools import wraps
 from argon2 import PasswordHasher
 # для декораторов
 from src.users.crud import get_baned_user_by_id, get_session_by_token, get_user_id, get_user_by_id
-from logger import get_logger
+from logger import get_logger, ColoredFormatter
 
 
-logger = get_logger("main_logger")
+userlogger = get_logger("user_loger")
+
 def get_db():
     db = SessionLocal()
     try:
@@ -76,15 +77,19 @@ def superuser_checker(func):
     return wrapper
 
 
-# регистрация новово пользователя
+#!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!     Начало запросов     !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+
+# регистрация нового пользователя
 @router.post("/register")
 def new_user(user_new: schemas.NewUser, db: Session = Depends(get_db)):
     result = crud.get_user_by_number(db, user_new.number)
     # проверяем нет ли пользователя с таким номером в системе
     if result is not None:
-        logger.info("User is already exist")
+        userlogger.warning("User " + str(PasswordHasher().hash(user_new.number)) + " is already exist")
         raise HTTPException(status_code=400, detail="Number already exist")
 
+    userlogger.info("User " + str(PasswordHasher().hash(user_new.number)) + " succesfully registred")
     return crud.create_user(db=db, user=user_new)
 
 
