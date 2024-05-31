@@ -76,7 +76,7 @@ def superuser_checker(func):
 
 # регистрация новово пользователя
 @router.post("/register")
-def new_user(user_new: Annotated[schemas.NewUser, Depends()], db: Session = Depends(get_db)):
+def new_user(user_new: schemas.NewUser, db: Session = Depends(get_db)):
     result = crud.get_user_by_number(db, user_new.number)
     # проверяем нет ли пользователя с таким номером в системе
     if result is not None:
@@ -87,7 +87,7 @@ def new_user(user_new: Annotated[schemas.NewUser, Depends()], db: Session = Depe
 
 # авторизация существующего пользователя по номеру и паролю
 @router.post("/auth")
-def user_auth(user: Annotated[schemas.UserAuth, Depends()], db: Session = Depends(get_db)):
+def user_auth(user: schemas.UserAuth, db: Session = Depends(get_db)):
     # проверяем не забанен ли порльзователь
     baned_user_by_id = crud.get_baned_user_by_number(db, user.number)
     if baned_user_by_id is not None:
@@ -113,7 +113,7 @@ def user_auth(user: Annotated[schemas.UserAuth, Depends()], db: Session = Depend
 @router.post("/ban")
 @token_checker
 @superuser_checker
-def ban(user_to_ban: Annotated[schemas.BanUser, Depends()], db: Session = Depends(get_db)):
+def ban(user_to_ban: schemas.BanUser, db: Session = Depends(get_db)):
     # проверяемc что пользователь которого мы хотим забанить существует
     user_by_id = get_user_by_id(db=db, user_id=user_to_ban.user_id)
     if user_by_id is None:
