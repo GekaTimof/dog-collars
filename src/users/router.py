@@ -1,16 +1,12 @@
 from fastapi import APIRouter, Depends
 import src.users.schemas as schemas
 from src.users.models import Users as db_user
-import uuid
 import src.users.crud as crud
 from src.users.crud import create_user_session
-from typing import Annotated
 from sqlalchemy.orm import Session
-#from sqlalchemy.ext.declarative import declarative_base
-#from sqlalchemy.orm import sessionmaker
 from fastapi import HTTPException
 from src.database import SessionLocal, DBSession
-from src.users import models, schemas
+from src.users import schemas
 from functools import wraps
 from argon2 import PasswordHasher
 from logger import get_logger
@@ -23,10 +19,12 @@ from src.function import get_arg_from_request
 userlogger = get_logger("user_loger")
 
 def get_db():
+    userlogger.debug("open db")
     db = SessionLocal()
     try:
         yield db
     finally:
+        userlogger.debug("close db")
         db.close()
 
 
@@ -45,6 +43,7 @@ def token_checker(func):
         # проверяем правильный ли токен
         session_by_token = get_session_by_token(db=db, token=token)
         if session_by_token is None:
+            userlogger.warning("Problems with token")
             raise HTTPException(status_code=400, detail="Wrong token")
 
         # получаем id пользователя
@@ -52,6 +51,7 @@ def token_checker(func):
         # проверяем, не забанен ли пользователь токена
         baned_user_by_id = get_baned_user_by_id(db=db, user_id=user_id)
         if baned_user_by_id is not None:
+            userlogger.error("Number is banned")
             raise HTTPException(status_code=400, detail="Number is baned")
 
         return func(*args, **kwargs)
@@ -75,6 +75,7 @@ def superuser_checker(func):
         # проверяем есть ли у пользователя права сурпер пользователя
         user_by_id = get_user_by_id(db=db, user_id=user_id)
         if user_by_id.is_superuser == 0:
+            userlogger.error("User is not admin")
             raise HTTPException(status_code=400, detail="User is not superuser")
 
         return func(*args, **kwargs)
@@ -93,10 +94,10 @@ def new_user(user_new: schemas.NewUser, db: Session = Depends(get_db)):
     # проверяем нет ли пользователя с таким номером в системе
     result = crud.get_user_by_number(db, user_new.number)
     if result is not None:
-        userlogger.warning("User " + str(PasswordHasher().hash(user_new.number)) + " is already exist")
+        userlogger.warning("User " + str(PasswordHasher().hash(user_new.number)[-20:]) + " is already exist")
         raise HTTPException(status_code=400, detail="Number already exist")
 
-    userlogger.info("User " + str(PasswordHasher().hash(user_new.number)) + " succesfully registred")
+    userlogger.info("User " + str(PasswordHasher().hash(user_new.number)[-20:]) + " succesfully registred")
     return crud.create_user(db=db, user=user_new)
 
 
@@ -106,17 +107,22 @@ def user_auth(user: schemas.UserAuth, db: Session = Depends(get_db)):
     # проверяем не забанен ли порльзователь
     baned_user_by_id = crud.get_baned_user_by_number(db, user.number)
     if baned_user_by_id is not None:
+        userlogger.error("User " + str(PasswordHasher().hash(user.number)[-20:]) + " is banned")
         raise HTTPException(status_code=400, detail="Number is baned")
 
     # проверяем есть ли пользователя с таким номером в системе
     user_by_number = crud.get_user_by_number(db, user.number)
     if user_by_number is None:
+        userlogger.warning("User " + str(PasswordHasher().hash(user.number)[-20:]) + " not exist")
         raise HTTPException(status_code=400, detail="Number not exist")
+
+    userlogger.info("User " + str(PasswordHasher().hash(user.number)[-20:]) + " was auth")
 
     # проверяем что проль подходи
     try:
         PasswordHasher().verify(user_by_number.hash_password, user.password)
     except:
+        userlogger.warning("User " + str(PasswordHasher().hash(user.number)[-20:]) + " gives wrong password")
         raise HTTPException(status_code=400, detail="wrong passwd")
 
     response = create_user_session(db, user_by_number.id)
@@ -133,6 +139,5 @@ def ban(user_to_ban: schemas.BanUser, db: Session = Depends(get_db)):
     user_by_id = get_user_by_id(db=db, user_id=user_to_ban.user_id)
     if user_by_id is None:
         raise HTTPException(status_code=400, detail="User to ban not exist")
-
     return crud.user_ban(db=db, user_id=user_to_ban.user_id)
 
