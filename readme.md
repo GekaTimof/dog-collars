@@ -4,7 +4,7 @@
 ```
 pip install -e git+https://github.com/GekaTimof/dog-collars#egg=dog_collars 
 ```
-![Иллюстрация к проекту](https://disk.yandex.ru/client/disk/%D0%97%D0%B0%D0%B3%D1%80%D1%83%D0%B7%D0%BA%D0%B8?idApp=client&dialog=slider&idDialog=%2Fdisk%2F%D0%97%D0%B0%D0%B3%D1%80%D1%83%D0%B7%D0%BA%D0%B8%2FFrame%201.png)
+![Схема проекта]([https://disk.yandex.ru/client/disk/%D0%97%D0%B0%D0%B3%D1%80%D1%83%D0%B7%D0%BA%D0%B8?idApp=client&dialog=slider&idDialog=%2Fdisk%2F%D0%97%D0%B0%D0%B3%D1%80%D1%83%D0%B7%D0%BA%D0%B8%2FFrame%201.png](https://s96klg.storage.yandex.net/rdisk/716e5dc4e1d27548a15bb52168286f694e450dd96b8da148ef4a299b11769c61/665abfe3/Pe2d2rVq5qcKAMftmhBsF5G4pQ25cqc80SlJWsIe6DZlRiMywwHorqtcAljfmAK20RTZ7j62Nc3WEUCuxTCqbg==?uid=995415011&filename=Frame%201.png&disposition=inline&hash=&limit=0&content_type=image%2Fpng&owner_uid=995415011&fsize=163870&hid=992851e110d57757c3d8ae583902de59&media_type=image&tknv=v2&etag=10510bb2a3d2335e9c850ba90dfc6707&ts=619ce3a757ec0&s=f4e6f934550c33aa6cce18a1c632c9536bd947dc2375a961b03fa04132b2180a&pb=U2FsdGVkX19HkqnItlSrwdDVRoXKmGcf9YUxHeT6RteVApsPYlRxCbzHbzCt5aguGT5gRkDPTDjO3CCpTdGoXtO5HAcUf3yJ4iBbeZkzlaA))
 ## Запросы для пользователя:
 1) Регистрация (Номер, пароль, уникальный для системы ник пользователя)
 2) Авторизация по номеру телефона и паролю (Номер, пароль)
