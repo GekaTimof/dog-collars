@@ -4,7 +4,7 @@
 ```
 pip install -e git+https://github.com/GekaTimof/dog-collars#egg=dog_collars 
 ```
-![Иллюстрация к проекту](https://www.figma.com/design/xmDeOfD8UsHVytwxtZe9pF/Untitled?node-id=0-1&t=MUaFDZ9Rc54GMbnC-1)
+![Иллюстрация к проекту](https://disk.yandex.ru/i/n8XTZUlQzKWR3A)
 ## Запросы для пользователя:
 1) Регистрация (Номер, пароль, уникальный для системы ник пользователя)
 2) Авторизация по номеру телефона и паролю (Номер, пароль)
