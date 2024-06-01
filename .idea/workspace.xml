@@ -4,10 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="56dcf0a6-6581-4838-8ded-650a2d559310" name="Changes" comment="post community tests">
+    <list default="true" id="56dcf0a6-6581-4838-8ded-650a2d559310" name="Changes" comment="requirements">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/readme.md" beforeDir="false" afterPath="$PROJECT_DIR$/readme.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/users/router.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/users/router.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -466,7 +465,15 @@
       <option name="project" value="LOCAL" />
       <updated>1717173551489</updated>
     </task>
-    <option name="localTasksCounter" value="41" />
+    <task id="LOCAL-00041" summary="requirements">
+      <option name="closed" value="true" />
+      <created>1717206545397</created>
+      <option name="number" value="00041" />
+      <option name="presentableId" value="LOCAL-00041" />
+      <option name="project" value="LOCAL" />
+      <updated>1717206545397</updated>
+    </task>
+    <option name="localTasksCounter" value="42" />
     <servers />
   </component>
   <component name="Vcs.Log.History.Properties">
@@ -511,6 +518,7 @@
     <MESSAGE value="some collars functions" />
     <MESSAGE value="post collars tests" />
     <MESSAGE value="post community tests" />
-    <option name="LAST_COMMIT_MESSAGE" value="post community tests" />
+    <MESSAGE value="requirements" />
+    <option name="LAST_COMMIT_MESSAGE" value="requirements" />
   </component>
 </project>
