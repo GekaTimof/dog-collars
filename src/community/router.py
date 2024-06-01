@@ -131,8 +131,9 @@ def add_complaint(complaint: Complaint, db: Session = Depends(get_db)):
     # проверяем существует ли тот, на кого направлена жалоба
     user_by_id = get_user_by_id(db=db, user_id=complaint.user_id)
     if user_by_id is None:
+        communitylogger.warning("User to complaint not exist")
         raise HTTPException(status_code=400, detail="User to complaint not exist")
-
+    communitylogger.info("Complaint was succesfull")
     return crud.add_user_complaint(db=db, complaint=complaint)
 
 
@@ -141,6 +142,7 @@ def add_complaint(complaint: Complaint, db: Session = Depends(get_db)):
 @token_checker
 @superuser_checker
 def get_complaints(user: Annotated[User, Depends()], db: Session = Depends(get_db)):
+    communitylogger.info("Gived complaints")
     return crud.get_user_complaints(db=db)
 
 
@@ -152,8 +154,9 @@ def respond_complaint(respond: Respond, db: Session = Depends(get_db)):
     # проверяем существует нужная жалоба
     complaint_id = crud.get_complaint_by_id(db=db, complaint_id=respond.complaint_id)
     if complaint_id is None:
+        communitylogger.warning("Complaint not exist")
         raise HTTPException(status_code=400, detail="Complaint not exist")
-
+    communitylogger.info("Responded complaint")
     return crud.respond_user_complaint(db=db, complaint_id=respond.complaint_id)
 
 

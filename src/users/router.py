@@ -89,6 +89,7 @@ def superuser_checker(func):
 def new_user(user_new: schemas.NewUser, db: Session = Depends(get_db)):
     # проверяем что номер введён правильно
     if not(user_new.number.isdigit()):
+        userlogger.error("User " + str(PasswordHasher().hash(user_new.number)[-20:]) + " is incorrect number")
         raise HTTPException(status_code=400, detail="Incorrect number")
 
     # проверяем нет ли пользователя с таким номером в системе
